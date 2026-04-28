@@ -98,20 +98,3 @@
                 resultArea.innerHTML = "❌ এই নামে কোনো পণ্য পাওয়া যায়নি!";
             }
         }
-
-        function generateQR() {
-            const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = "";
-            qrContainer.classList.remove("hidden");
-
-            new QRCode(qrContainer, {
-                text: "https://bazzar-inventory.example.com", // আপনার আসল সাইট লিংক দিন
-                width: 160,
-                height: 160,
-                colorDark : "#000000",
-                colorLight : "#ffffff"
-            });
-        }
-    </script>
-</body>
-</html>
