@@ -3,235 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bazzar OS 4.0 - Ultra Edition</title>
+    <title>Bazzar OS - Final Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00f2ff; --bg: #020205; }
+        :root { --p: #00f2ff; --bg: #020205; }
         body { 
-            background-color: var(--bg); 
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed; 
-            color: #e0e0e0; 
-            font-family: 'Space Grotesk', sans-serif; 
-            transition: 0.5s ease;
+            background: var(--bg); background-size: cover; background-position: center; background-attachment: fixed;
+            color: #fff; font-family: 'Space Grotesk', sans-serif; transition: 0.5s;
         }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; }
+        .glass { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 25px; }
         
-        /* Sidebar */
-        .sidebar { position: fixed; top: 0; right: 0; bottom: 0; background: rgba(5, 5, 10, 0.98); z-index: 500; transform: translateX(100%); transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .sidebar.active { transform: translateX(0); }
+        /* Grid Layout Fix */
+        .prod-img { width: 100%; height: 200px; object-fit: contain; background: rgba(255,255,255,0.02); border-radius: 20px; }
+        
+        /* Sidebar/Panels */
+        .side-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 350px; background: rgba(5, 5, 10, 0.98); z-index: 1000; transform: translateX(100%); transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--p); }
+        .side-panel.active { transform: translateX(0); }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-        /* Bot Animation */
-        .bot-pulse { box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); animation: pulse 2s infinite; }
+        /* Animation */
+        .bot-btn { animation: pulse 2s infinite; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body onload="initSystem()">
 
-    <div id="entrance" class="fixed inset-0 bg-black z-[2000] flex flex-col justify-center items-center transition-all duration-1000">
-        <h1 class="text-7xl font-cyber font-black text-white mb-10 tracking-tighter italic">BAZZAR</h1>
-        <button onclick="startApp()" class="px-12 py-4 border-2 border-cyan-500 text-cyan-400 rounded-full font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all">Connect System</button>
+    <div id="loader" class="fixed inset-0 bg-black z-[3000] flex flex-col justify-center items-center">
+        <h1 class="text-5xl font-cyber text-cyan-400 mb-4 tracking-[10px] animate-pulse">BAZZAR OS</h1>
+        <div class="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-cyan-500 animate-[loading_2s_ease-in-out_infinite]"></div>
+        </div>
+        <button onclick="bootApp()" class="mt-10 px-8 py-3 border border-cyan-500 text-cyan-400 font-cyber text-xs hover:bg-cyan-500 hover:text-black transition">INITIALIZE SYSTEM</button>
     </div>
 
-    <div id="mainApp" class="hidden opacity-0 p-4 md:p-8 max-w-7xl mx-auto">
+    <div id="app" class="hidden p-4 md:p-8 max-w-7xl mx-auto opacity-0 transition-opacity duration-1000">
         
-        <nav class="glass p-5 flex justify-between items-center mb-10 sticky top-4 z-[100]">
+        <nav class="glass p-5 flex justify-between items-center mb-10 sticky top-4 z-[500]">
             <div class="flex items-center gap-3">
-                <div class="w-2 h-8 bg-cyan-500 rounded-full shadow-[0_0_15px_#00f2ff]"></div>
-                <h2 class="font-cyber font-bold tracking-widest text-sm">BAZZAR OS <span class="text-[10px] opacity-50">v4.0</span></h2>
+                <i class="fas fa-microchip text-cyan-500 text-2xl"></i>
+                <h2 class="font-cyber font-bold text-cyan-400 tracking-tighter">CORE_INTERFACE</h2>
             </div>
             <div class="flex items-center gap-4">
-                <button id="adminBtn" onclick="toggleView('admin')" class="hidden text-[10px] border border-red-500 text-red-500 px-4 py-1.5 rounded-full font-bold uppercase hover:bg-red-500 hover:text-white transition">Admin Panel</button>
-                <button onclick="toggleSidebar('cartSide')" class="relative glass w-11 h-11 flex items-center justify-center">
-                    <i class="fas fa-shopping-cart text-sm"></i>
-                    <span id="cartCount" class="absolute -top-1 -right-1 bg-white text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                <button onclick="toggleAdmin()" id="adminBtn" class="hidden text-[10px] bg-red-500/20 text-red-500 border border-red-500/50 px-4 py-1.5 rounded-full uppercase font-bold hover:bg-red-500 hover:text-white transition">Root Terminal</button>
+                <button onclick="togglePanel('cartPanel')" class="relative glass w-11 h-11 flex items-center justify-center border border-white/10">
+                    <i class="fas fa-shopping-basket text-sm"></i>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-cyan-500 text-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
-                <button onclick="toggleSidebar('profileSide')" class="w-11 h-11 rounded-full border-2 border-cyan-500/30 overflow-hidden">
-                    <img id="navAvatar" src="" class="w-full h-full object-cover">
-                </button>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-4">
+                    <div class="text-right">
+                        <p id="uName" class="text-[10px] font-bold">ADMIN_USER</p>
+                        <p id="uID" class="text-[8px] text-gray-500">UID: 00000000</p>
+                    </div>
+                    <div id="uAvatar" class="w-10 h-10 rounded-xl border border-cyan-500 overflow-hidden bg-white/5"></div>
+                </div>
             </div>
         </nav>
 
-        <section id="storeView" class="grid grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
-            </section>
+        <div id="shop" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
 
-        <section id="adminView" class="hidden space-y-10 pb-32">
-            <div class="flex justify-between items-center">
-                <h1 class="text-3xl font-cyber text-red-500">ROOT CONFIGURATION</h1>
-                <button onclick="toggleView('store')" class="text-xs text-gray-500 uppercase">Exit Terminal</button>
+        <div id="adminPanel" class="hidden space-y-10 pb-32 animate__animated animate__fadeIn">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <h1 class="text-3xl font-cyber text-red-500">MASTER_CONTROL_UNIT</h1>
+                <button onclick="toggleAdmin()" class="text-xs text-gray-500">CLOSE_SESSION</button>
             </div>
-            
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="glass p-8 space-y-5 border-cyan-500/20">
-                    <h3 class="text-xs font-cyber text-cyan-400 uppercase tracking-[4px]">System Rules</h3>
-                    <input type="password" id="apiKeyInput" placeholder="Gemini API Key" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs border border-white/5 focus:border-cyan-500">
-                    <textarea id="aiRulesInput" placeholder="AI Behavior Rules..." class="w-full bg-white/5 p-4 rounded-2xl h-32 outline-none text-xs border border-white/5 focus:border-cyan-500"></textarea>
-                    <input type="text" id="bgInput" placeholder="Background Image URL" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs border border-white/5">
-                    <button onclick="saveAdminSettings()" class="w-full bg-cyan-600 py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Sync System</button>
+                <div class="glass p-8 space-y-4 border-l-2 border-cyan-500">
+                    <h3 class="text-xs font-cyber text-cyan-400 uppercase">System Configuration</h3>
+                    <input type="text" id="apiInput" placeholder="Gemini API Key" class="w-full bg-white/5 p-4 rounded-xl text-xs outline-none border border-white/10 focus:border-cyan-500">
+                    <textarea id="rulesInput" placeholder="AI Core Rules (System Rules)..." class="w-full bg-white/5 p-4 rounded-xl h-24 text-xs outline-none border border-white/10"></textarea>
+                    <input type="text" id="bgInput" placeholder="Wallpaper URL (Background Change)" class="w-full bg-white/5 p-4 rounded-xl text-xs border border-white/10">
+                    <button onclick="saveAdmin()" class="w-full bg-cyan-600 py-4 rounded-xl font-bold uppercase text-xs hover:bg-cyan-500 transition">Update Kernel</button>
                 </div>
 
-                <div class="glass p-8 space-y-5 border-purple-500/20">
-                    <h3 class="text-xs font-cyber text-purple-400 uppercase tracking-[4px]">Inventory Add</h3>
-                    <input type="text" id="newPName" placeholder="Product Name" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs">
-                    <input type="number" id="newPPrice" placeholder="Price (CR)" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs">
-                    <textarea id="newPDesc" placeholder="Description..." class="w-full bg-white/5 p-4 rounded-2xl h-24 outline-none text-xs"></textarea>
-                    <input type="text" id="newPImg" placeholder="Image URL (Direct link)" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs">
-                    <button onclick="addProduct()" class="w-full bg-purple-600 py-4 rounded-2xl font-bold uppercase text-[10px]">Add Product</button>
+                <div class="glass p-8 space-y-4 border-l-2 border-purple-500">
+                    <h3 class="text-xs font-cyber text-purple-400 uppercase">Inject New Asset</h3>
+                    <input type="text" id="inName" placeholder="Product Name" class="w-full bg-white/5 p-4 rounded-xl text-xs border border-white/10">
+                    <input type="number" id="inPrice" placeholder="Price (CR)" class="w-full bg-white/5 p-4 rounded-xl text-xs border border-white/10">
+                    <textarea id="inDesc" placeholder="Product Description..." class="w-full bg-white/5 p-4 rounded-xl h-20 text-xs border border-white/10"></textarea>
+                    <input type="text" id="inImg" placeholder="Image Direct Link" class="w-full bg-white/5 p-4 rounded-xl text-xs border border-white/10">
+                    <button onclick="addItem()" class="w-full bg-purple-600 py-4 rounded-xl font-bold uppercase text-xs hover:bg-purple-500 transition">Sync Product</button>
                 </div>
 
-                <div class="lg:col-span-3 glass p-8">
-                    <h3 class="text-xs font-cyber text-orange-400 mb-8 uppercase tracking-[4px]">Real-time Orders</h3>
-                    <div id="orderLog" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <div id="productModal" class="fixed inset-0 bg-black/95 z-[1000] hidden items-center justify-center p-5">
-        <div class="glass max-w-2xl w-full p-8 relative flex flex-col md:flex-row gap-8">
-            <button onclick="closeModal('productModal')" class="absolute top-5 right-5 text-gray-500 hover:text-white">✕</button>
-            <img id="modalImg" src="" class="w-full md:w-1/2 h-72 object-cover rounded-3xl shadow-2xl">
-            <div class="flex-1 flex flex-col justify-center">
-                <h2 id="modalName" class="text-3xl font-cyber mb-4"></h2>
-                <p id="modalDesc" class="text-gray-400 text-sm leading-loose mb-8"></p>
-                <div class="flex justify-between items-center">
-                    <span id="modalPrice" class="text-2xl font-bold text-cyan-400"></span>
-                    <button id="modalBuyBtn" class="bg-cyan-600 px-10 py-4 rounded-2xl font-bold uppercase text-xs tracking-widest hover:scale-105 transition">Add to Cart</button>
+                <div class="lg:col-span-1 glass p-8 border-l-2 border-orange-500">
+                    <h3 class="text-xs font-cyber text-orange-400 mb-6 uppercase">Order Monitor</h3>
+                    <div id="ordersList" class="space-y-4 max-h-80 overflow-y-auto"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="aiBot" class="fixed bottom-8 left-8 z-[1000]">
-        <button onclick="toggleChat()" class="w-16 h-16 bg-cyan-500 rounded-2xl flex items-center justify-center text-black shadow-2xl bot-pulse">
+    <div id="pModal" class="fixed inset-0 bg-black/95 z-[2000] hidden items-center justify-center p-6">
+        <div class="glass max-w-4xl w-full p-8 relative flex flex-col md:flex-row gap-10">
+            <button onclick="closePModal()" class="absolute top-5 right-5 text-gray-500 hover:text-white">✕</button>
+            <div class="md:w-1/2">
+                <img id="mImg" src="" class="w-full h-80 object-contain bg-white/5 rounded-3xl p-4">
+            </div>
+            <div class="flex-1">
+                <h2 id="mName" class="text-3xl font-cyber mb-4 text-cyan-400"></h2>
+                <p id="mDesc" class="text-gray-400 text-sm leading-relaxed mb-8 border-l border-cyan-500/30 pl-4"></p>
+                <div class="flex justify-between items-center">
+                    <span id="mPrice" class="text-3xl font-bold"></span>
+                    <button id="mBtn" class="bg-cyan-600 px-10 py-4 rounded-2xl font-bold uppercase text-xs shadow-lg shadow-cyan-900/40">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-8 left-8 z-[1500]">
+        <button onclick="toggleAI()" class="w-16 h-16 bg-cyan-500 rounded-2xl flex items-center justify-center text-black bot-btn">
             <i class="fas fa-robot text-2xl"></i>
         </button>
-        <div id="chatBox" class="hidden flex-col glass w-80 h-[450px] mt-4 overflow-hidden shadow-2xl border-cyan-500/20">
-            <div class="p-4 bg-cyan-500/10 border-b border-white/10 font-cyber text-[10px] tracking-widest text-cyan-400">NEURAL ASSISTANT</div>
-            <div id="chatLines" class="flex-1 overflow-y-auto p-4 space-y-4 text-[11px] scroll-smooth">
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/5">Welcome, Traveler. How may I facilitate your transaction?</div>
+        <div id="aiChat" class="hidden flex-col glass w-80 h-[450px] mt-4 overflow-hidden border border-cyan-500/30">
+            <div class="p-4 bg-cyan-500/10 border-b border-white/10 text-[10px] font-cyber text-cyan-400">NEURAL LINK ACTIVE</div>
+            <div id="chatLines" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px] font-mono">
+                <div class="text-gray-500">System: Awaiting instruction...</div>
             </div>
-            <div class="p-4 flex gap-2">
-                <input type="text" id="aiInput" placeholder="Message Matrix..." class="w-full bg-white/5 p-3 rounded-xl outline-none text-xs border border-white/10">
-                <button onclick="sendToAI()" class="text-cyan-400 px-3"><i class="fas fa-paper-plane"></i></button>
+            <div class="p-4 bg-black/40 flex gap-2">
+                <input type="text" id="chatIn" placeholder="Ask AI anything..." class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-xs outline-none">
+                <button onclick="askAI()" class="text-cyan-400"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
-    <div id="cartSide" class="sidebar w-full md:w-96 p-10 flex flex-col">
-        <div class="flex justify-between mb-10"><h2 class="font-cyber text-sm tracking-widest">ORDER_QUEUE</h2><button onclick="toggleSidebar('cartSide')">✕</button></div>
-        <div id="cartItems" class="flex-1 space-y-5 overflow-y-auto pr-2"></div>
-        <div class="pt-8 border-t border-white/10">
-            <div class="flex justify-between text-2xl font-bold mb-6"><span>Total:</span><span id="totalPrice" class="text-cyan-400">0</span></div>
-            <button onclick="openNagad()" class="w-full bg-orange-600 py-5 rounded-2xl font-bold uppercase text-[10px] tracking-[4px]">Nagad Checkout</button>
-        </div>
-    </div>
-
-    <div id="profileSide" class="sidebar w-80 p-10">
-        <div class="text-center mt-10">
-            <div class="w-24 h-24 mx-auto rounded-3xl p-1 bg-gradient-to-tr from-cyan-500 to-purple-600 mb-6">
-                <img id="sideAvatar" class="w-full h-full rounded-[22px] bg-black">
+    <div id="cartPanel" class="side-panel p-8 flex flex-col">
+        <h2 class="font-cyber text-sm mb-10 text-cyan-400 tracking-widest uppercase">Encryption_Cart</h2>
+        <div id="cartItems" class="flex-1 space-y-4 overflow-y-auto pr-2"></div>
+        <div class="pt-6 border-t border-white/10 mt-6">
+            <div class="flex justify-between font-bold mb-6">
+                <span class="text-gray-500 text-xs">AGGREGATE:</span>
+                <span id="cartTotal" class="text-xl text-white">0 CR</span>
             </div>
-            <h3 id="sideName" class="text-xl font-bold font-cyber"></h3>
-            <p id="sideID" class="text-xs text-cyan-500 font-mono mt-2"></p>
-        </div>
-        <div class="mt-16 glass p-6 text-center">
-            <p class="text-[10px] text-gray-500 uppercase mb-4 tracking-widest">Scan Gateway</p>
-            <div id="qrBox" class="bg-white p-2 rounded-2xl inline-block"></div>
+            <button onclick="openPayment()" class="w-full bg-orange-600 py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Execute Checkout (Nagad)</button>
         </div>
     </div>
 
-    <div id="nagadModal" class="fixed inset-0 bg-black/95 z-[1500] hidden items-center justify-center p-5">
-        <div class="glass max-w-sm w-full p-10 text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Nagad_Logo.svg/1024px-Nagad_Logo.svg.png" class="w-16 mx-auto mb-6">
-            <h2 class="text-xl font-bold mb-2">Nagad Payment</h2>
-            <p class="text-[11px] text-gray-500 mb-8">Send Money To: <span class="text-white font-bold">01XXXXXXXXX</span></p>
-            <input type="text" id="trxIDInput" placeholder="Transaction ID" class="w-full bg-white/5 p-4 rounded-2xl border border-white/10 outline-none text-center font-mono tracking-widest mb-6">
-            <button onclick="confirmOrder()" class="w-full bg-orange-600 py-4 rounded-2xl font-bold uppercase text-xs">Verify Payment</button>
-            <button onclick="closeModal('nagadModal')" class="mt-4 text-xs text-gray-500 uppercase">Back</button>
+    <div id="payModal" class="fixed inset-0 bg-black/98 z-[2500] hidden items-center justify-center p-6">
+        <div class="glass max-w-sm w-full p-10 text-center border-orange-500/20">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Nagad_Logo.svg/1024px-Nagad_Logo.svg.png" class="w-16 mx-auto mb-8">
+            <div class="bg-black/50 p-4 rounded-2xl mb-8 border border-white/5">
+                <p class="text-[10px] text-gray-500 mb-1 uppercase">Merchant Wallet</p>
+                <p class="text-xl font-bold text-white tracking-widest">01XXXXXXXXX</p>
+            </div>
+            <input type="text" id="trxId" placeholder="Input Transaction ID" class="w-full bg-white/5 p-4 rounded-xl text-center mb-6 outline-none font-mono tracking-widest border border-white/10 focus:border-orange-500">
+            <button onclick="submitOrder()" class="w-full bg-orange-600 py-4 rounded-xl font-bold uppercase text-xs">Verify & Confirm</button>
+            <button onclick="closePayment()" class="mt-6 text-[10px] text-gray-600 uppercase">Abort Transaction</button>
         </div>
     </div>
 
     <script>
-        // Core State
-        let state = {
-            products: JSON.parse(localStorage.getItem('b_products')) || [
-                { id: 1, name: "Neural Vision Goggles", price: 850, desc: "Ultra-high resolution AR experience with direct neural feedback systems.", img: "https://images.unsplash.com/photo-1573333235114-1e5f8bc87820?w=600" },
-                { id: 2, name: "Cyber Pad v2", price: 420, desc: "A haptic interface designed for fast coding and matrix navigation.", img: "https://images.unsplash.com/photo-1544117518-2b47abc19f0d?w=600" }
+        // System Core Data
+        let system = {
+            products: JSON.parse(localStorage.getItem('b_prods')) || [
+                { id: 101, name: "Neural Processor", price: 1200, desc: "Ultra-fast chip for AI processing and holographic rendering.", img: "https://images.unsplash.com/photo-1591405351990-4726e331f141?w=400" },
+                { id: 102, name: "Cypher Key v4", price: 850, desc: "High-security physical key for encrypted database access.", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=400" }
             ],
             cart: [],
             orders: JSON.parse(localStorage.getItem('b_orders')) || [],
-            user: null,
-            api_key: localStorage.getItem('api_key') || '',
-            ai_rules: localStorage.getItem('ai_rules') || 'You are Bazzar OS Assistant. Help users with products. Verification: Nagad TrxID must be 8+ characters.'
+            adminId: "00000001", // Default Admin UID
+            config: {
+                apiKey: localStorage.getItem('b_key') || '',
+                rules: localStorage.getItem('b_rules') || 'You are Bazzar OS AI. Assist users with their purchases and inventory.',
+                bg: localStorage.getItem('b_bg') || ''
+            }
         };
 
         function initSystem() {
-            // Apply Theme
-            const bg = localStorage.getItem('app_bg');
-            if(bg) document.body.style.backgroundImage = `url('${bg}')`;
-
-            // ID Management
-            let uid = localStorage.getItem('u_id');
-            if(!uid) {
-                let last = parseInt(localStorage.getItem('last_id') || "0");
-                uid = (last + 1).toString().padStart(8, '0');
-                localStorage.setItem('u_id', uid);
-                localStorage.setItem('last_id', last + 1);
-            }
-
-            state.user = {
-                id: uid,
-                name: uid === "00000001" ? "ADMIN_ROOT" : `GUEST_${uid.slice(-4)}`,
-                avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${uid}`
-            };
-
-            // Setup Profile
-            document.getElementById('navAvatar').src = state.user.avatar;
-            document.getElementById('sideAvatar').src = state.user.avatar;
-            document.getElementById('sideName').innerText = state.user.name;
-            document.getElementById('sideID').innerText = `ID: ${state.user.id}`;
+            // Setup User (Point 5: UID & Avatar)
+            let uid = localStorage.getItem('b_uid') || Math.floor(Math.random()*90000000 + 10000000).toString();
+            localStorage.setItem('b_uid', uid);
             
-            // Setup QR
-            document.getElementById('qrBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.href}" class="w-32 h-32">`;
-
-            if(state.user.id === "00000001") document.getElementById('adminBtn').classList.remove('hidden');
-
-            renderStore();
+            const is_admin = uid === system.adminId;
+            document.getElementById('uName').innerText = is_admin ? "ROOT_ADMIN" : "CLIENT_" + uid.slice(-4);
+            document.getElementById('uID').innerText = "UID: " + uid;
+            document.getElementById('uAvatar').innerHTML = `<img src="https://api.dicebear.com/7.x/bottts/svg?seed=${uid}" class="w-full h-full">`;
+            
+            if(is_admin) document.getElementById('adminBtn').classList.remove('hidden');
+            if(system.config.bg) document.body.style.backgroundImage = `url('${system.config.bg}')`;
+            
+            renderShop();
+            renderOrders();
         }
 
-        function startApp() {
-            const ent = document.getElementById('entrance');
-            const app = document.getElementById('mainApp');
-            ent.style.opacity = "0";
-            setTimeout(() => {
-                ent.style.display = "none";
-                app.classList.remove('hidden');
-                setTimeout(() => app.style.opacity = "1", 50);
-            }, 1000);
+        function bootApp() {
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            setTimeout(() => document.getElementById('app').style.opacity = '1', 10);
         }
 
-        function renderStore() {
-            const grid = document.getElementById('storeView');
-            grid.innerHTML = '';
-            state.products.forEach(p => {
-                grid.innerHTML += `
-                    <div class="glass p-4 cursor-pointer group" onclick="openProduct(${p.id})">
-                        <div class="relative overflow-hidden rounded-2xl h-44 mb-5">
-                            <img src="${p.img}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                        </div>
-                        <h3 class="text-xs font-cyber tracking-widest uppercase truncate mb-2">${p.name}</h3>
-                        <div class="flex justify-between items-center">
-                            <span class="text-cyan-400 font-bold">${p.price} CR</span>
-                            <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition translate-x--2 group-hover:translate-x-0"></i>
+        // Shop Management
+        function renderShop() {
+            const container = document.getElementById('shop');
+            container.innerHTML = '';
+            system.products.forEach(p => {
+                container.innerHTML += `
+                    <div class="glass p-5 group cursor-pointer border border-white/5 hover:border-cyan-500/50 transition-all" onclick="openProduct(${p.id})">
+                        <img src="${p.img}" class="prod-img mb-4 group-hover:scale-105 transition-transform">
+                        <h3 class="text-[11px] font-cyber tracking-wider text-white uppercase">${p.name}</h3>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-cyan-400 font-bold font-cyber text-sm">${p.price} CR</span>
+                            <i class="fas fa-plus-circle text-gray-600 group-hover:text-cyan-500"></i>
                         </div>
                     </div>
                 `;
@@ -239,142 +212,149 @@
         }
 
         function openProduct(id) {
-            const p = state.products.find(x => x.id === id);
-            document.getElementById('modalImg').src = p.img;
-            document.getElementById('modalName').innerText = p.name;
-            document.getElementById('modalDesc').innerText = p.desc;
-            document.getElementById('modalPrice').innerText = `${p.price} CR`;
-            document.getElementById('modalBuyBtn').onclick = () => { addToCart(p.id); closeModal('productModal'); };
-            document.getElementById('productModal').style.display = 'flex';
+            const p = system.products.find(x => x.id === id);
+            document.getElementById('mImg').src = p.img;
+            document.getElementById('mName').innerText = p.name;
+            document.getElementById('mDesc').innerText = p.desc;
+            document.getElementById('mPrice').innerText = p.price + " CR";
+            document.getElementById('mBtn').onclick = () => { addToCart(p.id); closePModal(); };
+            document.getElementById('pModal').style.display = 'flex';
         }
 
+        // Cart Logic
         function addToCart(id) {
-            state.cart.push(state.products.find(x => x.id === id));
-            updateCart();
+            const p = system.products.find(x => x.id === id);
+            system.cart.push(p);
+            updateCartUI();
         }
 
-        function updateCart() {
+        function updateCartUI() {
             const list = document.getElementById('cartItems');
-            let total = 0;
-            list.innerHTML = '';
-            state.cart.forEach((item, idx) => {
+            let total = 0; list.innerHTML = '';
+            system.cart.forEach((item, idx) => {
                 total += parseInt(item.price);
-                list.innerHTML += `<div class="flex items-center gap-4 glass p-3 text-xs"><img src="${item.img}" class="w-10 h-10 object-cover rounded-lg"> <span class="flex-1 truncate">${item.name}</span> <span>${item.price}</span> <button onclick="removeFromCart(${idx})">✕</button></div>`;
+                list.innerHTML += `
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center animate__animated animate__fadeInRight">
+                        <div>
+                            <p class="text-[11px] font-bold text-white">${item.name}</p>
+                            <p class="text-[10px] text-cyan-500">${item.price} CR</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-gray-600 hover:text-red-500"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
             });
-            document.getElementById('cartCount').innerText = state.cart.length;
-            document.getElementById('totalPrice').innerText = total;
+            document.getElementById('cartTotal').innerText = total + " CR";
+            document.getElementById('cartCount').innerText = system.cart.length;
         }
 
-        function removeFromCart(idx) { state.cart.splice(idx, 1); updateCart(); }
+        function removeFromCart(idx) {
+            system.cart.splice(idx, 1);
+            updateCartUI();
+        }
 
-        // AI Assistant
-        async function sendToAI() {
-            const input = document.getElementById('aiInput');
-            const lines = document.getElementById('chatLines');
-            if(!input.value || !state.api_key) return alert("System Config required.");
+        // AI System (Point 3)
+        async function askAI() {
+            const input = document.getElementById('chatIn');
+            const box = document.getElementById('chatLines');
+            if(!input.value || !system.config.apiKey) return alert("System Error: AI_KEY_MISSING");
 
-            const val = input.value;
+            const prompt = input.value;
             input.value = '';
-            lines.innerHTML += `<div class="text-right text-gray-500">You: ${val}</div>`;
+            box.innerHTML += `<div class="text-right text-cyan-200">>> ${prompt}</div>`;
 
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.api_key}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `Rules: ${state.ai_rules}. Message: ${val}` }] }] })
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${system.config.apiKey}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Rules: ${system.config.rules}. Inventory: ${JSON.stringify(system.products)}. User says: ${prompt}` }] }] })
                 });
-                const data = await res.json();
+                const data = await response.json();
                 const aiMsg = data.candidates[0].content.parts[0].text;
-                lines.innerHTML += `<div class="text-cyan-400 bg-cyan-500/5 p-3 rounded-2xl border border-cyan-500/10">AI: ${aiMsg}</div>`;
-                lines.scrollTop = lines.scrollHeight;
-            } catch (e) {
-                lines.innerHTML += `<div class="text-red-500">Neural Sync Error. Check API Key.</div>`;
-            }
+                box.innerHTML += `<div class="text-cyan-500">AI: ${aiMsg}</div>`;
+                box.scrollTop = box.scrollHeight;
+            } catch (e) { box.innerHTML += `<div class="text-red-500">LINK_ERROR: Unable to connect to Gemini Core.</div>`; }
         }
 
-        // Order Logic
-        function confirmOrder() {
-            const trx = document.getElementById('trxIDInput').value;
-            if(trx.length < 8) return alert("Invalid TRX ID Format.");
+        // Order Management (Point 4: সিরিয়াল অর্ডার আইডি)
+        function submitOrder() {
+            const trx = document.getElementById('trxId').value;
+            if(trx.length < 5) return alert("INVALID_TRX_ID");
 
-            const orderID = (111 + state.orders.length).toString().padStart(4, '0');
+            const orderId = (111 + system.orders.length).toString().padStart(4, '0');
             const newOrder = {
-                id: orderID,
-                u_id: state.user.id,
-                u_name: state.user.name,
-                items: state.cart.map(c => c.name).join(", "),
-                total: document.getElementById('totalPrice').innerText,
+                id: orderId,
+                user: document.getElementById('uName').innerText,
+                items: system.cart.map(c => c.name).join(", "),
+                total: document.getElementById('cartTotal').innerText,
                 trx: trx,
-                time: new Date().toLocaleTimeString()
+                status: "Pending Verification"
             };
 
-            state.orders.push(newOrder);
-            localStorage.setItem('b_orders', JSON.stringify(state.orders));
-            alert(`Order Successful! ID: ${orderID}`);
-            state.cart = [];
-            updateCart();
-            closeModal('nagadModal');
-            toggleSidebar('cartSide');
+            system.orders.push(newOrder);
+            localStorage.setItem('b_orders', JSON.stringify(system.orders));
+            alert("SUCCESS: Order ID #" + orderId + " has been logged.");
+            system.cart = []; updateCartUI(); closePayment(); togglePanel('cartPanel');
+            renderOrders();
         }
 
-        // Admin Functions
-        function saveAdminSettings() {
-            state.api_key = document.getElementById('apiKeyInput').value;
-            state.ai_rules = document.getElementById('aiRulesInput').value;
-            const bg = document.getElementById('bgInput').value;
-            
-            localStorage.setItem('api_key', state.api_key);
-            localStorage.setItem('ai_rules', state.ai_rules);
-            if(bg) {
-                localStorage.setItem('app_bg', bg);
-                document.body.style.backgroundImage = `url('${bg}')`;
-            }
-            alert("Master Config Updated.");
-        }
-
-        function addProduct() {
+        // Admin Helpers (Point 2)
+        function addItem() {
             const p = {
                 id: Date.now(),
-                name: document.getElementById('newPName').value,
-                price: document.getElementById('newPPrice').value,
-                desc: document.getElementById('newPDesc').value,
-                img: document.getElementById('newPImg').value
+                name: document.getElementById('inName').value,
+                price: document.getElementById('inPrice').value,
+                desc: document.getElementById('inDesc').value,
+                img: document.getElementById('inImg').value
             };
-            state.products.push(p);
-            localStorage.setItem('b_products', JSON.stringify(state.products));
-            renderStore();
-            alert("Inventory Synced.");
+            if(!p.name || !p.price) return alert("MISSING_DATA");
+            system.products.push(p);
+            localStorage.setItem('b_prods', JSON.stringify(system.products));
+            renderShop(); alert("ASSET_INJECTED");
+        }
+
+        function saveAdmin() {
+            system.config.apiKey = document.getElementById('apiInput').value;
+            system.config.rules = document.getElementById('rulesInput').value;
+            system.config.bg = document.getElementById('bgInput').value;
+            localStorage.setItem('b_key', system.config.apiKey);
+            localStorage.setItem('b_rules', system.config.rules);
+            if(system.config.bg) {
+                localStorage.setItem('b_bg', system.config.bg);
+                document.body.style.backgroundImage = `url('${system.config.bg}')`;
+            }
+            alert("SYSTEM_REBOOT_COMPLETE");
         }
 
         function renderOrders() {
-            const log = document.getElementById('orderLog');
-            log.innerHTML = '';
-            state.orders.slice().reverse().forEach(o => {
-                log.innerHTML += `
-                    <div class="glass p-5 border-l-4 border-cyan-500 text-[11px]">
-                        <div class="flex justify-between font-bold text-cyan-400 mb-2"><span>#${o.id}</span><span>${o.time}</span></div>
-                        <p class="mb-1">FROM: ${o.u_name} (${o.u_id})</p>
-                        <p class="mb-1">ITEMS: ${o.items}</p>
-                        <p class="font-bold text-orange-500">TRX: ${o.trx}</p>
-                        <div class="text-right mt-2 font-bold">${o.total} CR</div>
+            const list = document.getElementById('ordersList');
+            list.innerHTML = '';
+            system.orders.slice().reverse().forEach(o => {
+                list.innerHTML += `
+                    <div class="bg-white/5 p-4 rounded-xl border-l-2 border-orange-500 text-[10px]">
+                        <div class="flex justify-between font-bold mb-1"><span>#${o.id}</span><span class="text-orange-500">${o.total}</span></div>
+                        <p class="text-gray-500 mb-2 truncate">${o.items}</p>
+                        <p class="text-cyan-400 font-mono tracking-tighter">TRX: ${o.trx}</p>
                     </div>
                 `;
             });
         }
 
-        // UI Helpers
-        function toggleSidebar(id) { document.getElementById(id).classList.toggle('active'); }
-        function toggleView(v) {
-            document.getElementById('storeView').classList.toggle('hidden', v==='admin');
-            document.getElementById('adminView').classList.toggle('hidden', v==='store');
-            if(v === 'admin') renderOrders();
+        // UI Handlers
+        function toggleAdmin() { 
+            const is_admin = localStorage.getItem('b_uid') === system.adminId;
+            if(!is_admin) {
+                const pass = prompt("Access Restricted. Enter Root Password:");
+                if(pass !== "admin123") return alert("ACCESS_DENIED");
+                localStorage.setItem('b_uid', system.adminId);
+                location.reload();
+            }
+            document.getElementById('shop').classList.toggle('hidden');
+            document.getElementById('adminPanel').classList.toggle('hidden');
         }
-        function toggleChat() { 
-            const box = document.getElementById('chatBox');
-            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
-        }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openNagad() { if(state.cart.length > 0) document.getElementById('nagadModal').style.display = 'flex'; }
+        function togglePanel(id) { document.getElementById(id).classList.toggle('active'); }
+        function toggleAI() { const c = document.getElementById('aiChat'); c.style.display = c.style.display === 'flex' ? 'none' : 'flex'; }
+        function closePModal() { document.getElementById('pModal').style.display = 'none'; }
+        function openPayment() { if(system.cart.length > 0) document.getElementById('payModal').style.display = 'flex'; }
+        function closePayment() { document.getElementById('payModal').style.display = 'none'; }
     </script>
 </body>
-    </html>
+                        </html>
