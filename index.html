@@ -3,331 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bazzar OS - Future Shop</title>
+    <title>Bazzar OS - Neural ID Ecosystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00f2ff;
-            --accent: #7000ff;
-            --bg: #050505;
-        }
+        :root { --primary: #00f2ff; --accent: #bc00ff; --bg: #020205; }
+        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
+        .font-cyber { font-family: 'Orbitron', sans-serif; }
+        
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px; }
+        .neon-glow { text-shadow: 0 0 10px var(--primary); }
+        
+        /* Entrance Animation */
+        #welcomeScreen { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 1s ease-in-out; }
+        .btn-entry { background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 50px; padding: 2px; transition: 0.3s; }
+        .btn-entry:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
 
-        body {
-            background-color: var(--bg);
-            color: #e0e0e0;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-        }
+        /* Sidebar Styling */
+        .sidebar { position: fixed; top: 0; right: 0; bottom: 0; background: rgba(5, 5, 10, 0.98); backdrop-filter: blur(50px); z-index: 200; transform: translateX(100%); transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar.active { transform: translateX(0); }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-        }
-
-        .glow-button {
-            position: relative;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-
-        .glow-button:hover {
-            box-shadow: 0 0 20px var(--primary);
-            background: var(--primary);
-            color: black;
-        }
-
-        .product-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .product-card:hover {
-            transform: scale(1.05) translateY(-10px);
-            background: rgba(255, 255, 255, 0.07);
-        }
-
-        .neon-text {
-            text-shadow: 0 0 10px var(--primary);
-        }
-
-        /* Animated Background */
-        .bg-animate {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-item { animation: slideIn 0.5s ease forwards; }
+        .id-badge { background: rgba(0, 242, 255, 0.1); border: 1px border var(--primary); padding: 2px 10px; border-radius: 5px; font-size: 10px; color: var(--primary); }
+        
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <div class="bg-animate"></div>
-
-    <nav class="max-w-5xl mx-auto glass sticky top-6 z-50 p-4 flex justify-between items-center mb-12 px-8">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
-                <i class="fas fa-atom text-white"></i>
-            </div>
-            <span class="text-2xl font-bold tracking-tighter neon-text">BAZZAR OS</span>
-        </div>
-        
-        <div class="flex items-center gap-6">
-            <button onclick="toggleView('admin')" id="portalBtn" class="text-xs uppercase tracking-widest font-bold text-cyan-400 border border-cyan-400/30 px-4 py-2 rounded-full hover:bg-cyan-400/10 transition">Admin Portal</button>
-            <div class="relative cursor-pointer" onclick="toggleCart()">
-                <i class="fas fa-shopping-bag text-xl text-white"></i>
-                <span id="cartCount" class="absolute -top-2 -right-3 bg-cyan-500 text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-            </div>
-        </div>
-    </nav>
-
-    <main id="userSection" class="max-w-6xl mx-auto space-y-12">
-        <section class="text-center space-y-6 py-10">
-            <h1 class="text-5xl md:text-7xl font-bold">Future of <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Shopping</span></h1>
-            <div class="max-w-2xl mx-auto flex gap-3 p-2 glass rounded-full px-6">
-                <input type="text" id="mainSearch" onkeyup="filterItems()" placeholder="Search neural inventory..." class="bg-transparent w-full outline-none p-3 text-lg">
-                <button onclick="startVoiceSearch()" class="text-cyan-400 px-4 hover:scale-110 transition"><i class="fas fa-microphone"></i></button>
-            </div>
-        </section>
-
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            </div>
-    </main>
-
-    <main id="adminSection" class="max-w-6xl mx-auto hidden space-y-8 animate-item">
-        <div class="flex justify-between items-center">
-            <h2 class="text-3xl font-bold">Control Center</h2>
-            <button onclick="toggleView('user')" class="text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-2"></i>Exit Admin</button>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass p-8 space-y-4">
-                <h3 class="text-xl font-bold mb-4 text-cyan-400">Add Energy Core (Product)</h3>
-                <input type="text" id="pName" placeholder="Item Name" class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none focus:border-cyan-500">
-                <input type="number" id="pPrice" placeholder="Credits (Price)" class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none">
-                <input type="number" id="pStock" placeholder="Stock Level" class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none">
-                <button onclick="addNewProduct()" class="w-full bg-cyan-600 py-4 rounded-xl font-bold glow-button">SYNC PRODUCT</button>
-            </div>
-
-            <div class="md:col-span-2 glass overflow-hidden">
-                <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                    <span class="font-bold">Inventory Logs</span>
-                    <span id="stockStatus" class="text-xs text-cyan-400 bg-cyan-400/10 px-3 py-1 rounded-full uppercase">All Systems Nominal</span>
-                </div>
-                <div class="overflow-y-auto max-h-[400px]">
-                    <table class="w-full text-left">
-                        <tbody id="adminTable"></tbody>
-                    </table>
+    <div id="welcomeScreen">
+        <div class="text-center space-y-6 z-10 animate-pulse">
+            <h1 class="text-6xl md:text-8xl font-black italic font-cyber tracking-tighter text-white">BAZZAR</h1>
+            <p class="text-cyan-500 tracking-[12px] uppercase text-[10px]">Neural ID Identity System</p>
+            <div class="pt-10">
+                <div class="btn-entry inline-block">
+                    <button onclick="initSystem()" class="bg-[#050505] px-10 py-4 rounded-full text-white font-bold uppercase tracking-widest text-sm hover:bg-transparent transition">Initialize Login</button>
                 </div>
             </div>
-        </div>
-    </main>
-
-    <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-[#0a0a0a]/95 backdrop-blur-3xl z-[100] translate-x-full transition-transform duration-500 p-8 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="text-2xl font-bold italic tracking-tighter">SECURE CART</h2>
-            <button onclick="toggleCart()" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition">✕</button>
-        </div>
-        <div id="cartContent" class="flex-1 overflow-y-auto space-y-6"></div>
-        <div class="mt-8 space-y-4">
-            <div class="flex justify-between text-xl font-bold">
-                <span>Total Credits</span>
-                <span id="cartTotal" class="text-cyan-400">$0</span>
-            </div>
-            <button onclick="finalizePurchase()" class="w-full bg-gradient-to-r from-cyan-600 to-purple-600 py-5 rounded-2xl font-black tracking-widest uppercase hover:scale-[1.02] transition">INITIALIZE CHECKOUT</button>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 glass px-8 py-4 rounded-full border-cyan-500/50 text-cyan-400 font-bold opacity-0 transition-all duration-300 pointer-events-none z-[200]">
-        Notification Sent
+    <div id="appInterface" class="hidden opacity-0 transition-opacity duration-1000 p-4 md:p-8 overflow-y-auto h-screen">
+        
+        <nav class="max-w-6xl mx-auto glass p-4 flex justify-between items-center mb-10 px-6 sticky top-0 z-50">
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 bg-cyan-500 rounded-lg rotate-45 flex items-center justify-center"><i class="fas fa-bolt text-black -rotate-45 text-xs"></i></div>
+                <span class="font-cyber font-bold tracking-widest text-sm hidden md:block">BAZZAR OS</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="adminBtn" onclick="toggleMode('admin')" class="hidden bg-red-500/10 text-red-500 border border-red-500/30 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase hover:bg-red-500 hover:text-white transition">Root Terminal</button>
+                
+                <button onclick="toggleSidebar('cartSide')" class="w-10 h-10 glass flex items-center justify-center relative">
+                    <i class="fas fa-shopping-cart text-sm"></i>
+                    <span id="cCount" class="absolute -top-1 -right-1 bg-white text-black text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+                
+                <button onclick="toggleSidebar('userSide')" class="w-10 h-10 glass flex items-center justify-center overflow-hidden border-2 border-cyan-500/30">
+                    <img id="navAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Admin" class="w-full h-full">
+                </button>
+            </div>
+        </nav>
+
+        <div id="shopUI" class="max-w-6xl mx-auto space-y-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <h2 class="text-3xl font-bold font-cyber">STORE_NODE</h2>
+                <div class="glass flex items-center px-4 py-2 w-full md:w-80">
+                    <i class="fas fa-search text-gray-500 mr-3 text-sm"></i>
+                    <input type="text" id="searchBar" onkeyup="renderShop()" placeholder="Search Matrix..." class="bg-transparent outline-none text-sm w-full">
+                </div>
+            </div>
+            <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+        </div>
+
+        <div id="adminUI" class="max-w-6xl mx-auto hidden animate-in space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-bold font-cyber text-red-500">ROOT_ACCESS</h2>
+                <button onclick="toggleMode('user')" class="text-xs text-gray-500 uppercase">Exit Terminal</button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass p-6 space-y-4 border-red-500/20">
+                    <p class="text-[10px] uppercase font-bold text-red-400 tracking-widest">Inject New Item</p>
+                    <input type="text" id="itemName" placeholder="Item Name" class="w-full bg-white/5 p-3 rounded-xl border border-white/10 outline-none text-sm">
+                    <input type="number" id="itemPrice" placeholder="Price (Credits)" class="w-full bg-white/5 p-3 rounded-xl border border-white/10 outline-none text-sm">
+                    <button onclick="addItem()" class="w-full bg-red-600 py-3 rounded-xl font-bold text-xs">EXECUTE SYNC</button>
+                </div>
+                <div class="lg:col-span-2 glass overflow-hidden border-white/5">
+                    <table class="w-full text-left text-xs"><tbody id="adminList"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="userSide" class="sidebar w-80 p-8">
+        <div class="flex justify-between items-center mb-10">
+            <span class="text-[10px] font-cyber tracking-widest text-cyan-400">USER_PROFILE</span>
+            <button onclick="toggleSidebar('userSide')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="text-center space-y-4 mb-10">
+            <div class="w-24 h-24 mx-auto p-1 rounded-3xl bg-gradient-to-tr from-cyan-500 to-purple-500 shadow-lg">
+                <img id="sideAvatar" class="w-full h-full rounded-[22px] bg-[#050505]">
+            </div>
+            <div>
+                <h3 id="profileName" class="text-xl font-bold font-cyber">Guest User</h3>
+                <div id="idDisplay" class="font-mono text-cyan-400 text-sm mt-1">ID: 00000000</div>
+            </div>
+            <div id="roleBadge" class="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] uppercase tracking-widest">Standard User</div>
+        </div>
+        
+        <div class="space-y-4">
+            <div class="glass p-4">
+                <p class="text-[9px] text-gray-500 uppercase mb-2">QR Identity</p>
+                <img id="qrImg" class="w-32 h-32 mx-auto bg-white p-2 rounded-xl shadow-lg">
+            </div>
+            <button onclick="localStorage.clear(); location.reload();" class="w-full py-3 text-[10px] text-red-500 font-bold uppercase tracking-widest hover:bg-red-500/5 rounded-xl transition">Wipe Session Data</button>
+        </div>
+    </div>
+
+    <div id="cartSide" class="sidebar w-full md:w-96 p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8"><h2 class="font-cyber font-bold tracking-widest">CART_DATA</h2><button onclick="toggleSidebar('cartSide')">✕</button></div>
+        <div id="cItems" class="flex-1 space-y-4 overflow-y-auto pr-2"></div>
+        <div class="pt-6 border-t border-white/10 mt-4">
+            <div class="flex justify-between text-xl font-cyber mb-4"><span>Total:</span><span id="cTotal" class="text-cyan-400">0</span></div>
+            <button onclick="checkout()" class="w-full bg-cyan-600 py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Authorize Transaction</button>
+        </div>
     </div>
 
     <script>
-        // Database
-        let inventory = JSON.parse(localStorage.getItem('bazzar_v3_db')) || [
-            { id: 1, name: "Neural Link Headset", price: 1200, stock: 5, img: "https://images.unsplash.com/photo-1544117518-2b47abc19f0d?w=400" },
-            { id: 2, name: "Fusion Smartwatch", price: 450, stock: 12, img: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400" },
-            { id: 3, name: "Cyber Armor Case", price: 85, stock: 25, img: "https://images.unsplash.com/photo-1586776900441-2c069502845c?w=400" }
+        // Core State
+        let currentUser = null;
+        let products = JSON.parse(localStorage.getItem('b_products')) || [
+            { id: 1, name: "Neural Link v4", price: 2400, img: "https://images.unsplash.com/photo-1544117518-2b47abc19f0d?w=400" },
+            { id: 2, name: "Cyber Armor", price: 1200, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" }
         ];
-
         let cart = [];
 
-        // UI Logic
-        function toggleView(mode) {
-            const user = document.getElementById('userSection');
-            const admin = document.getElementById('adminSection');
-            const btn = document.getElementById('portalBtn');
-
-            if(mode === 'admin') {
-                user.classList.add('hidden');
-                admin.classList.remove('hidden');
-                btn.style.display = 'none';
-                renderAdmin();
-            } else {
-                admin.classList.add('hidden');
-                user.classList.remove('hidden');
-                btn.style.display = 'block';
-                renderUser();
+        // ID Generation System (Free Fire Style)
+        function initSystem() {
+            let savedID = localStorage.getItem('user_id');
+            if(!savedID) {
+                // First User gets 00000001
+                let lastID = parseInt(localStorage.getItem('last_assigned_id') || "0");
+                let newIDNum = lastID + 1;
+                savedID = newIDNum.toString().padStart(8, '0');
+                localStorage.setItem('user_id', savedID);
+                localStorage.setItem('last_assigned_id', newIDNum);
             }
+            
+            currentUser = {
+                id: savedID,
+                name: savedID === "00000001" ? "System Admin" : "Guest_" + savedID.slice(-4),
+                role: savedID === "00000001" ? "Admin" : "User",
+                avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${savedID}`
+            };
+
+            setupUI();
         }
 
-        function renderUser() {
-            const grid = document.getElementById('productGrid');
-            const search = document.getElementById('mainSearch').value.toLowerCase();
-            grid.innerHTML = '';
+        function setupUI() {
+            const welcome = document.getElementById('welcomeScreen');
+            const app = document.getElementById('appInterface');
+            
+            // Apply User Info
+            document.getElementById('profileName').innerText = currentUser.name;
+            document.getElementById('idDisplay').innerText = "ID: " + currentUser.id;
+            document.getElementById('navAvatar').src = currentUser.avatar;
+            document.getElementById('sideAvatar').src = currentUser.avatar;
+            document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ID:${currentUser.id}`;
+            
+            if(currentUser.role === "Admin") {
+                document.getElementById('adminBtn').classList.remove('hidden');
+                document.getElementById('roleBadge').innerText = "Root Administrator";
+                document.getElementById('roleBadge').classList.add('text-red-500', 'border-red-500/20');
+            }
 
-            inventory.filter(i => i.name.toLowerCase().includes(search)).forEach((p, idx) => {
+            // Animation
+            welcome.style.opacity = "0";
+            setTimeout(() => {
+                welcome.style.display = "none";
+                app.classList.remove('hidden');
+                setTimeout(() => { app.style.opacity = "1"; document.body.style.overflow = "auto"; }, 50);
+            }, 1000);
+
+            renderShop();
+        }
+
+        function renderShop() {
+            const grid = document.getElementById('grid');
+            const search = document.getElementById('searchBar').value.toLowerCase();
+            grid.innerHTML = '';
+            
+            products.filter(p => p.name.toLowerCase().includes(search)).forEach(p => {
                 grid.innerHTML += `
-                    <div class="glass p-4 product-card animate-item" style="animation-delay: ${idx * 0.1}s">
-                        <div class="h-48 rounded-2xl overflow-hidden mb-4 relative">
-                            <img src="${p.img}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="glass p-3 hover:border-cyan-500/50 transition-all duration-300 group">
+                        <div class="relative overflow-hidden rounded-2xl h-32 md:h-40 mb-3">
+                            <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-1">${p.name}</h3>
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <p class="text-cyan-400 font-bold">$${p.price}</p>
-                                <p class="text-[10px] text-gray-500 uppercase tracking-widest">${p.stock} units in node</p>
-                            </div>
-                            <button onclick="addToCart(${p.id})" class="w-12 h-12 bg-white/5 hover:bg-cyan-500 hover:text-black transition rounded-xl flex items-center justify-center">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                        <h3 class="text-xs font-bold mb-1 truncate uppercase tracking-tighter">${p.name}</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-cyan-400 font-cyber text-[10px]">${p.price} CR</span>
+                            <button onclick="addToCart(${p.id})" class="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center hover:bg-cyan-500 hover:text-black transition text-[10px]"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 `;
             });
+            renderAdminList();
         }
 
-        function renderAdmin() {
-            const table = document.getElementById('adminTable');
-            table.innerHTML = '';
-            inventory.forEach(p => {
-                table.innerHTML += `
-                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
-                        <td class="p-6 font-bold text-sm">${p.name}</td>
-                        <td class="p-6 text-cyan-400 font-bold italic">$${p.price}</td>
-                        <td class="p-6"><span class="bg-white/5 px-3 py-1 rounded text-xs">${p.stock} QTY</span></td>
-                        <td class="p-6 text-right">
-                            <button onclick="deleteProduct(${p.id})" class="text-gray-600 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-            localStorage.setItem('bazzar_v3_db', JSON.stringify(inventory));
+        function toggleMode(mode) {
+            document.getElementById('shopUI').classList.toggle('hidden', mode === 'admin');
+            document.getElementById('adminUI').classList.toggle('hidden', mode === 'user');
         }
 
-        // Cart Actions
+        function toggleSidebar(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
         function addToCart(id) {
-            const item = inventory.find(i => i.id === id);
-            cart.push(item);
-            showToast(`Added ${item.name} to neural cart`);
+            cart.push(products.find(p => p.id === id));
             updateCart();
         }
 
         function updateCart() {
-            const content = document.getElementById('cartContent');
-            const totalEl = document.getElementById('cartTotal');
-            const countEl = document.getElementById('cartCount');
-            
-            content.innerHTML = '';
+            const list = document.getElementById('cItems');
             let total = 0;
-
-            cart.forEach((item, index) => {
+            list.innerHTML = '';
+            cart.forEach((item, idx) => {
                 total += item.price;
-                content.innerHTML += `
-                    <div class="flex items-center gap-4 animate-item">
-                        <img src="${item.img}" class="w-16 h-16 rounded-xl object-cover grayscale hover:grayscale-0 transition duration-500">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">${item.name}</h4>
-                            <p class="text-cyan-400 text-xs font-bold">$${item.price}</p>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500"><i class="fas fa-times"></i></button>
-                    </div>
-                `;
+                list.innerHTML += `<div class="flex items-center gap-3 glass p-3 text-[10px]"><img src="${item.img}" class="w-8 h-8 rounded-lg object-cover"><span class="flex-1 truncate">${item.name}</span><span class="text-cyan-400">${item.price}</span><button onclick="removeFromCart(${idx})">✕</button></div>`;
             });
-
-            totalEl.innerText = `$${total}`;
-            countEl.innerText = cart.length;
+            document.getElementById('cTotal').innerText = total;
+            document.getElementById('cCount').innerText = cart.length;
         }
 
-        function removeFromCart(idx) {
-            cart.splice(idx, 1);
-            updateCart();
-        }
+        function removeFromCart(idx) { cart.splice(idx, 1); updateCart(); }
 
-        function toggleCart() {
-            document.getElementById('cartSidebar').classList.toggle('translate-x-full');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.opacity = '1';
-            setTimeout(() => toast.style.opacity = '0', 2000);
-        }
-
-        // Search logic
-        function filterItems() { renderUser(); }
-
-        function startVoiceSearch() {
-            if ('webkitSpeechRecognition' in window) {
-                const recognition = new webkitSpeechRecognition();
-                recognition.onresult = (e) => {
-                    document.getElementById('mainSearch').value = e.results[0][0].transcript;
-                    renderUser();
-                };
-                recognition.start();
-                showToast("Listening to neural frequencies...");
-            } else {
-                alert("Speech recognition not supported in this environment.");
+        // Admin Actions
+        function addItem() {
+            const name = document.getElementById('itemName').value;
+            const price = document.getElementById('itemPrice').value;
+            if(name && price) {
+                products.push({ id: Date.now(), name, price: parseInt(price), img: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400" });
+                renderShop();
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemPrice').value = '';
             }
         }
 
-        function addNewProduct() {
-            const name = document.getElementById('pName').value;
-            const price = document.getElementById('pPrice').value;
-            const stock = document.getElementById('pStock').value;
-            
-            if(name && price && stock) {
-                inventory.push({
-                    id: Date.now(),
-                    name,
-                    price: parseInt(price),
-                    stock: parseInt(stock),
-                    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
-                });
-                renderAdmin();
-                showToast("Inventory Updated Successfully");
-            }
+        function deleteItem(id) {
+            products = products.filter(p => p.id !== id);
+            renderShop();
         }
 
-        function deleteProduct(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            renderAdmin();
+        function renderAdminList() {
+            const list = document.getElementById('adminList');
+            list.innerHTML = '';
+            products.forEach(p => {
+                list.innerHTML += `<tr class="border-b border-white/5"><td class="p-4 font-bold">${p.name}</td><td class="p-4 text-cyan-400">${p.price} CR</td><td class="p-4 text-right"><button onclick="deleteItem(${p.id})" class="text-red-500 hover:text-white transition">Delete</button></td></tr>`;
+            });
+            localStorage.setItem('b_products', JSON.stringify(products));
         }
 
-        function finalizePurchase() {
-            if(cart.length === 0) return showToast("Cart is Empty");
-            alert("Transaction Secure! Order Logged in Blockchain.");
-            cart = [];
-            updateCart();
-            toggleCart();
+        function checkout() { 
+            if(cart.length === 0) return;
+            alert(`Purchase Authorized by ID: ${currentUser.id}\nCredits Deducted.`); 
+            cart = []; 
+            updateCart(); 
+            toggleSidebar('cartSide'); 
         }
-
-        // Init
-        renderUser();
     </script>
 </body>
-    </html>
+</html>
