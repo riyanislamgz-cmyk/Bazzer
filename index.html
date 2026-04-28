@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazzar - Future Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #001d3d 0%, #000814 100%);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            border-radius: 20px;
+        }
+        /* হোম প্রোফাইল লাল রঙের সেকশন */
+        .profile-card {
+            background: linear-gradient(135deg, #d00000 0%, #9d0208 100%);
+            box-shadow: 0 10px 30px rgba(208, 0, 0, 0.4);
+            border: 2px solid #ff0000;
+        }
+        .neon-blue {
+            text-shadow: 0 0 10px #00b4d8;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <section class="max-w-md mx-auto mt-10 p-8 rounded-3xl text-center profile-card mb-12">
+        <div class="mb-4">
+            <div class="w-20 h-20 bg-white/20 rounded-full mx-auto flex items-center justify-center border-2 border-white/50 mb-4">
+                <span class="text-3xl">🛒</span>
+            </div>
+            <h1 class="text-5xl font-black tracking-tighter text-white uppercase italic">Bazzar</h1>
+            <p class="text-red-200 text-sm mt-1 tracking-widest">ADVANCED AI DROP-SHIPPING</p>
+        </div>
+        
+        <button class="mt-6 bg-white text-red-700 font-bold px-12 py-3 rounded-full hover:bg-red-100 transition-all uppercase tracking-widest shadow-lg">
+            Open
+        </button>
+    </section>
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <section class="glass p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 
+                ইনভেন্টরি লিস্ট (Search)
+            </h2>
+            <div class="flex gap-2">
+                <input type="text" id="searchInput" placeholder="পণ্যের নাম লিখুন..." 
+                       class="w-full p-3 rounded-xl bg-black/40 border border-blue-500/50 focus:border-blue-400 outline-none text-white">
+                <button onclick="searchProduct()" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-xl font-bold transition-all">
+                    খুঁজুন
+                </button>
+            </div>
+            <div id="resultArea" class="mt-4 text-blue-300 font-medium"></div>
+        </section>
+
+        <section class="glass p-6 text-center">
+            <h2 class="text-xl font-bold mb-6">Inventory QR Code</h2>
+            <div id="qrcode" class="flex justify-center mb-6 p-4 bg-white rounded-2xl w-fit mx-auto hidden"></div>
+            <button onclick="generateQR()" class="border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-10 py-3 rounded-xl font-bold transition-all">
+                QR কোড তৈরি করুন
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        // আপনার প্রোডাক্ট লিস্ট এখানে যোগ করুন
+        const products = [
+            { name: "Smart Watch", stock: 15 },
+            { name: "Headphone", stock: 20 },
+            { name: "iPhone Case", stock: 50 },
+            { name: "USB Cable", stock: 100 }
+        ];
+
+        function searchProduct() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultArea = document.getElementById('resultArea');
+            
+            const product = products.find(p => p.name.toLowerCase().includes(input));
+
+            if (input === "") {
+                resultArea.innerHTML = "";
+                return;
+            }
+
+            if (product) {
+                resultArea.innerHTML = `✅ ${product.name}: <span class="text-white font-bold">${product.stock}</span> টি স্টকে আছে।`;
+            } else {
+                resultArea.innerHTML = "❌ এই নামে কোনো পণ্য পাওয়া যায়নি!";
+            }
+        }
+
+        function generateQR() {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            qrContainer.classList.remove("hidden");
+
+            new QRCode(qrContainer, {
+                text: "https://bazzar-inventory.example.com", // আপনার আসল সাইট লিংক দিন
+                width: 160,
+                height: 160,
+                colorDark : "#000000",
+                colorLight : "#ffffff"
+            });
+        }
+    </script>
+</body>
+</html>
