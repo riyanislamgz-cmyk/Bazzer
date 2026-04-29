@@ -1,435 +1,526 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAZZAR OS | TITAN ENTERPRISE EDITION</title>
+    <title>AI E-Commerce Platform | Next-Gen Shopping</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@300;500&display=swap" rel="stylesheet">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00f2ff;
-            --secondary: #ff007a;
-            --bg: #020205;
-            --panel: rgba(10, 10, 15, 0.95);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { font-family: 'Inter', sans-serif; }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        body {
-            background-color: var(--bg);
-            color: #e0e0e0;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
-
-        .font-cyber { font-family: 'Orbitron', sans-serif; }
-        .font-code { font-family: 'Fira Code', monospace; }
-
-        /* Advanced UI Elements */
-        .glass {
-            background: var(--panel);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+        
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out;
         }
-
-        .glass:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
-            transform: scale(1.02);
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        /* Cyber Glitch Effect */
-        .glitch {
-            position: relative;
-            display: inline-block;
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .glitch:hover::before, .glitch:hover::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg);
+        
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .glitch:hover::before { left: 2px; text-shadow: -2px 0 var(--secondary); clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
-        .glitch:hover::after { left: -2px; text-shadow: -2px 0 var(--primary); clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 1s infinite linear alternate-reverse; }
-
-        @keyframes glitch-anim { 0% { clip: rect(10px, 9999px, 50px, 0); } 100% { clip: rect(80px, 9999px, 30px, 0); } }
-        @keyframes glitch-anim2 { 0% { clip: rect(30px, 9999px, 10px, 0); } 100% { clip: rect(60px, 9999px, 90px, 0); } }
-
-        /* Sidebar System */
-        .sidebar {
-            position: fixed; top: 0; left: 0; height: 100vh; width: 80px;
-            background: rgba(0, 0, 0, 0.8); border-right: 1px solid rgba(255,255,255,0.05);
-            z-index: 1000; transition: 0.4s; display: flex; flex-direction: column; align-items: center; padding-top: 30px;
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
         }
-        .sidebar:hover { width: 220px; }
-        .nav-item { width: 100%; padding: 20px 28px; display: flex; align-items: center; gap: 20px; color: #666; transition: 0.3s; cursor: pointer; }
-        .nav-item:hover { color: var(--primary); background: rgba(0, 242, 255, 0.05); }
-        .nav-text { opacity: 0; pointer-events: none; white-space: nowrap; font-size: 10px; font-family: 'Orbitron'; tracking: 2px; }
-        .sidebar:hover .nav-text { opacity: 1; }
-
-        /* Floating Objects */
-        .float-blob {
-            position: fixed; width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-            z-index: -1; animation: float 20s infinite alternate;
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
         }
-
-        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(100px, 100px); } }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        
+        .ai-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode {
+            background: #0f0f0f;
+            color: #ffffff;
+        }
+        
+        .dark-mode .glassmorphism {
+            background: rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
-<body onload="bootTitan()">
-
-    <div class="float-blob" style="top: 10%; left: 5%;"></div>
-    <div class="float-blob" style="bottom: 10%; right: 5%; background: radial-gradient(circle, rgba(255, 0, 122, 0.03) 0%, transparent 70%);"></div>
-
-    <aside class="sidebar">
-        <div class="mb-10 text-primary text-2xl"><i class="fas fa-ghost"></i></div>
-        <div class="nav-item" onclick="showView('shop')"><i class="fas fa-th-large"></i><span class="nav-text">MARKETPLACE</span></div>
-        <div class="nav-item" onclick="showView('profile')"><i class="fas fa-user-astronaut"></i><span class="nav-text">PROFILE_LOG</span></div>
-        <div class="nav-item" onclick="toggleAdmin()"><i class="fas fa-terminal"></i><span class="nav-text">ROOT_TERMINAL</span></div>
-        <div class="mt-auto mb-10 nav-item text-red-500" onclick="logout()"><i class="fas fa-power-off"></i><span class="nav-text">TERMINATE</span></div>
-    </aside>
-
-    <div id="loader" class="fixed inset-0 bg-black z-[5000] flex flex-col justify-center items-center">
-        <div class="text-primary text-6xl mb-6 animate-pulse"><i class="fas fa-biohazard"></i></div>
-        <h1 class="font-cyber text-2xl tracking-[10px]">TITAN_OS_v1.0</h1>
-        <div class="w-64 h-[1px] bg-white/10 mt-10 relative overflow-hidden">
-            <div id="loadProgress" class="absolute inset-0 bg-primary w-0 transition-all"></div>
-        </div>
-        <p id="loadStatus" class="text-[8px] font-code text-gray-600 mt-4 uppercase">Connecting to Neural Link...</p>
-    </div>
-
-    <div id="mainUI" class="pl-24 pr-8 py-8 opacity-0 transition-all duration-1000">
-        
-        <header class="flex justify-between items-center mb-16">
-            <div>
-                <h2 class="text-xs font-cyber text-primary tracking-[5px] uppercase mb-1">Central_Hub</h2>
-                <p id="systemClock" class="text-[10px] font-code text-gray-500"></p>
-            </div>
-            
-            <div class="flex items-center gap-6">
-                <div class="bg-white/5 border border-white/10 px-6 py-2 rounded-2xl flex items-center gap-4">
-                    <div class="text-right">
-                        <p class="text-[8px] text-gray-500 uppercase font-cyber">Secure_Balance</p>
-                        <p id="walletBal" class="text-lg font-bold font-code text-orange-400">0.00 CR</p>
-                    </div>
-                    <button onclick="toggleCart()" class="relative w-12 h-12 glass flex items-center justify-center">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span id="cartCount" class="absolute -top-1 -right-1 bg-primary text-black text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+<body class="bg-gray-50 dark:bg-gray-900 transition-all duration-300">
+    <!-- Navigation Bar -->
+    <nav class="glassmorphism fixed w-full z-50 top-0 left-0">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-robot text-3xl text-blue-500"></i>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                        AI Commerce
+                    </span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="hover:text-blue-500 transition">হোম</a>
+                    <a href="#" class="hover:text-blue-500 transition">পণ্য</a>
+                    <a href="#" class="hover:text-blue-500 transition">AI সুপারিশ</a>
+                    <a href="#" class="hover:text-blue-500 transition">ভয়েস শপিং</a>
+                    <a href="#" class="hover:text-blue-500 transition">ড্যাশবোর্ড</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleDarkMode()" class="text-2xl">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="relative">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">0</span>
+                    </button>
+                    <button class="gradient-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                        <i class="fas fa-store"></i> সেলার হোন
                     </button>
                 </div>
-                <div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden">
-                    <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Riyan" alt="avatar">
-                </div>
             </div>
-        </header>
-
-        <div id="view_shop" class="view-panel active">
-            <div class="flex flex-wrap gap-4 mb-10">
-                <button onclick="filterShop('ALL')" class="px-6 py-2 glass text-[10px] font-cyber tracking-widest text-primary border-primary/20">ALL_ASSETS</button>
-                <button onclick="filterShop('CODE')" class="px-6 py-2 glass text-[10px] font-cyber tracking-widest hover:text-primary">SCRIPTS</button>
-                <button onclick="filterShop('MODEL')" class="px-6 py-2 glass text-[10px] font-cyber tracking-widest hover:text-primary">3D_MODELS</button>
-                <div class="flex-1"></div>
-                <input type="text" oninput="searchItems(this.value)" placeholder="Search database..." class="bg-white/5 border border-white/10 rounded-xl px-6 py-2 text-xs outline-none focus:border-primary w-64 font-code">
-            </div>
-            
-            <div id="shopGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
         </div>
+    </nav>
 
-        <div id="view_profile" class="view-panel hidden">
-            <div class="max-w-4xl glass p-10 mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div>
-                    <h2 class="text-2xl font-cyber text-primary mb-8">USER_PROFILE_LOG</h2>
-                    <div class="space-y-6 text-[11px] font-code uppercase">
-                        <div class="flex justify-between border-b border-white/5 pb-2"><span>USER_ID</span><span id="p_id" class="text-cyan-500"></span></div>
-                        <div class="flex justify-between border-b border-white/5 pb-2"><span>SECURITY_LVL</span><span class="text-green-500">LEVEL_7_ADMIN</span></div>
-                        <div class="flex justify-between border-b border-white/5 pb-2"><span>REGION</span><span class="text-white">BARISHAL_BD</span></div>
-                        <div class="flex justify-between border-b border-white/5 pb-2"><span>TOTAL_SPENT</span><span id="p_spent" class="text-orange-400">0 CR</span></div>
-                    </div>
-                </div>
-                <div class="border-l border-white/10 pl-10">
-                    <h3 class="text-[10px] font-cyber mb-4">RECENT_ACTIVITY</h3>
-                    <div id="orderHistory" class="space-y-3 h-64 overflow-y-auto pr-4"></div>
+    <!-- Hero Section with 3D Background -->
+    <section class="relative pt-24 min-h-screen flex items-center">
+        <div id="canvas-container" class="absolute inset-0"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center animate-slide-in">
+                <h1 class="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    AI-চালিত স্মার্ট কমার্স
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
+                    ভয়েস দিয়ে খুঁজুন, ছবি দিয়ে কেনাকাটা করুন, AI দিয়ে সেল করুন
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button onclick="startVoiceSearch()" class="gradient-bg text-white px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-microphone"></i> ভয়েস দিয়ে খুঁজুন
+                    </button>
+                    <button onclick="document.getElementById('imageUpload').click()" class="border-2 border-blue-500 text-blue-500 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-500 hover:text-white transition flex items-center justify-center gap-2">
+                        <i class="fas fa-image"></i> ছবি দিয়ে খুঁজুন
+                    </button>
+                    <input type="file" id="imageUpload" accept="image/*" class="hidden" onchange="searchByImage(this)">
                 </div>
             </div>
         </div>
+    </section>
 
-        <div id="view_admin" class="view-panel hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div class="glass p-8">
-                    <h3 class="text-[10px] font-cyber text-primary mb-6 uppercase tracking-widest">Asset_Injection</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="in_name" placeholder="Asset Name" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xs font-code">
-                        <input type="number" id="in_price" placeholder="Price (CR)" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xs font-code">
-                        <select id="in_cat" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xs font-code outline-none">
-                            <option value="CODE">SCRIPT</option>
-                            <option value="MODEL">3D_MODEL</option>
-                            <option value="NEURAL">NEURAL_LINK</option>
-                        </select>
-                        <input type="text" id="in_img" placeholder="Image URL" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xs font-code">
-                        <button onclick="injectItem()" class="w-full py-4 bg-primary text-black font-cyber font-bold rounded-xl hover:bg-white transition-all text-xs tracking-widest">SYNC_DATABASE</button>
-                    </div>
+    <!-- AI Features Showcase -->
+    <section class="py-20 bg-gradient-to-b from-transparent to-gray-100 dark:to-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">🚀 AI-পাওয়ারড ফিচারসমূহ</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-105 transition">
+                    <i class="fas fa-magic text-5xl text-purple-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">অটো-ক্যাটালগিং</h3>
+                    <p class="text-gray-600 dark:text-gray-400">শুধু ছবি আপলোড করুন, AI নিজেই নাম, ক্যাটাগরি, এসইও তৈরি করবে</p>
                 </div>
-                <div class="lg:col-span-2 glass p-8">
-                    <h3 class="text-[10px] font-cyber text-secondary mb-6 uppercase tracking-widest">Database_Live_View</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-[10px] font-code">
-                            <thead><tr class="text-gray-500 border-b border-white/10">
-                                <th class="py-4">ID</th><th class="py-4">NAME</th><th class="py-4">PRICE</th><th class="py-4">ACTION</th>
-                            </tr></thead>
-                            <tbody id="adminTable" class="text-white"></tbody>
-                        </table>
-                    </div>
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-105 transition">
+                    <i class="fas fa-brain text-5xl text-blue-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">ইন্টেন্ট সার্চ</h3>
+                    <p class="text-gray-600 dark:text-gray-400">"বিয়ের জন্য লাল কিছু" - এটাও বুঝবে AI</p>
+                </div>
+                <div class="glassmorphism p-6 rounded-2xl text-center hover:scale-105 transition">
+                    <i class="fas fa-chart-line text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">প্রেডিক্টিভ ইনভেন্টরি</h3>
+                    <p class="text-gray-600 dark:text-gray-400">কোন পণ্য ফুরোবে, আগেই বলে দেবে</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Product Grid -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-4xl font-bold">🔥 AI সুপারিশকৃত পণ্য</h2>
+                <div class="flex space-x-2">
+                    <button onclick="filterProducts('all')" class="px-4 py-2 rounded-lg bg-blue-500 text-white">সব</button>
+                    <button onclick="filterProducts('electronic')" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700">ইলেক্ট্রনিক্স</button>
+                    <button onclick="filterProducts('fashion')" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700">ফ্যাশন</button>
+                </div>
+            </div>
+            <div id="productGrid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Assistant -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleChat()" class="gradient-bg w-14 h-14 rounded-full shadow-lg hover:scale-110 transition flex items-center justify-center">
+            <i class="fas fa-robot text-white text-2xl"></i>
+        </button>
+        
+        <div id="chatBox" class="hidden absolute bottom-20 right-0 w-96 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="gradient-bg p-4 text-white">
+                <h3 class="font-bold">AI সহায়ক</h3>
+                <p class="text-sm opacity-90">অর্ডার ট্র্যাকিং, রিফান্ড, কমপ্লেইন</p>
+            </div>
+            <div id="chatMessages" class="h-96 overflow-y-auto p-4 space-y-2">
+                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                    👋 হাই! আমি আপনার AI সহায়ক। কিভাবে সাহায্য করতে পারি?
+                </div>
+            </div>
+            <div class="p-4 border-t dark:border-gray-700">
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." class="flex-1 px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600">
+                    <button onclick="sendMessage()" class="gradient-bg text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="cartOverlay" class="fixed inset-0 bg-black/90 z-[2000] hidden flex-col items-center justify-center p-6 animate__animated animate__fadeIn">
-        <div class="glass max-w-xl w-full p-10 border-primary/20">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="font-cyber text-primary tracking-[10px]">CART_MANIFEST</h2>
-                <button onclick="toggleCart()" class="text-gray-500 hover:text-white">✕</button>
+    <!-- Real-time Stock Alert Demo -->
+    <div class="fixed top-24 right-6 z-40">
+        <div id="stockAlert" class="hidden glassmorphism p-4 rounded-lg border-l-4 border-red-500">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-exclamation-triangle text-red-500"></i>
+                <span id="stockMessage">স্টক শেষ!</span>
             </div>
-            <div id="cartItems" class="space-y-4 max-h-[400px] overflow-y-auto pr-4 mb-10"></div>
-            <div class="flex justify-between items-center border-t border-white/10 pt-6">
-                <p class="font-cyber text-[10px] text-gray-500">TOTAL_CREDITS</p>
-                <p id="totalPrice" class="text-2xl font-bold font-code text-white">0.00 CR</p>
-            </div>
-            <button onclick="openCheckout()" class="w-full py-5 bg-orange-600 mt-8 rounded-2xl font-cyber font-bold tracking-widest text-[10px] hover:bg-orange-500 shadow-2xl shadow-orange-600/20">INITIALIZE_PAYMENT_NAGAD</button>
         </div>
     </div>
-
-    <div id="notifyBox" class="fixed top-10 right-10 z-[6000] space-y-4"></div>
 
     <script>
-        // System Core Memory
-        let titan = {
-            products: JSON.parse(localStorage.getItem('t_prods')) || [
-                {id: 101, name: "Neural Scripter 5.0", price: 2500, cat: "CODE", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400"},
-                {id: 102, name: "Neon Katana 3D", price: 1200, cat: "MODEL", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=400"},
-                {id: 103, name: "Cyberpunk Avatar Pack", price: 8500, cat: "MODEL", img: "https://images.unsplash.com/photo-1614726365940-6c1f0bd3d15b?w=400"}
-            ],
-            cart: [],
-            wallet: parseInt(localStorage.getItem('t_wallet')) || 10000,
-            spent: parseInt(localStorage.getItem('t_spent')) || 0,
-            adminId: "00000001",
-            orders: JSON.parse(localStorage.getItem('t_orders')) || []
-        };
+        // ========== PRODUCT DATA ==========
+        const products = [
+            { id: 1, name: "AI স্মার্টওয়াচ", price: 12999, category: "electronic", image: "https://picsum.photos/200/200?random=1", stock: 15 },
+            { id: 2, name: "ওয়্যারলেস ইয়ারবাড", price: 3999, category: "electronic", image: "https://picsum.photos/200/200?random=2", stock: 8 },
+            { id: 3, name: "ডিজাইন শার্ট", price: 1499, category: "fashion", image: "https://picsum.photos/200/200?random=3", stock: 25 },
+            { id: 4, name: "জিন্স প্যান্ট", price: 2499, category: "fashion", image: "https://picsum.photos/200/200?random=4", stock: 12 },
+            { id: 5, name: "গেমিং কিবোর্ড", price: 5499, category: "electronic", image: "https://picsum.photos/200/200?random=5", stock: 5 },
+            { id: 6, name: "স্মার্ট লাইট বাল্ব", price: 899, category: "electronic", image: "https://picsum.photos/200/200?random=6", stock: 3 },
+            { id: 7, name: "লেদার বেল্ট", price: 799, category: "fashion", image: "https://picsum.photos/200/200?random=7", stock: 30 },
+            { id: 8, name: "সানগ্লাস", price: 1299, category: "fashion", image: "https://picsum.photos/200/200?random=8", stock: 18 }
+        ];
 
-        // System Initialization
-        function bootTitan() {
-            let p = 0;
-            const bar = document.getElementById('loadProgress');
-            const status = document.getElementById('loadStatus');
-            const messages = ["Connecting to Mainframe...", "Checking Neural Integrity...", "Syncing Database...", "Accessing Kernel...", "Initialization Complete."];
+        let cart = [];
+        let currentFilter = 'all';
+        let scene, camera, renderer;
+
+        // ========== 3D BACKGROUND ==========
+        function init3DBackground() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
+            const material = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true });
+            const knot = new THREE.Mesh(geometry, material);
+            scene.add(knot);
+
+            camera.position.z = 3;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                knot.rotation.x += 0.01;
+                knot.rotation.y += 0.02;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // ========== RENDER PRODUCTS ==========
+        function renderProducts() {
+            const filtered = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+            const grid = document.getElementById('productGrid');
             
-            const interval = setInterval(() => {
-                p += Math.random() * 20;
-                if(p >= 100) {
-                    p = 100; clearInterval(interval);
-                    document.getElementById('loader').classList.add('animate__animated', 'animate__fadeOut');
-                    setTimeout(() => {
-                        document.getElementById('loader').style.display = 'none';
-                        document.getElementById('mainUI').classList.remove('opacity-0');
-                    }, 500);
-                }
-                bar.style.width = p + "%";
-                status.innerText = messages[Math.floor((p/100) * messages.length)];
-            }, 100);
-
-            let uid = localStorage.getItem('t_uid') || Math.floor(Math.random()*90000000 + 10000000).toString();
-            localStorage.setItem('t_uid', uid);
-            document.getElementById('p_id').innerText = "#" + uid;
-            
-            updateSystemUI();
-            renderMarket();
-            startTime();
-        }
-
-        // Clock System
-        function startTime() {
-            const now = new Date();
-            document.getElementById('systemClock').innerText = `SYSTEM_TIME: ${now.toLocaleTimeString()} | ENCRYPTION: AES-256-GCM`;
-            setTimeout(startTime, 1000);
-        }
-
-        // View Controller
-        function showView(viewId) {
-            document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
-            document.getElementById('view_' + viewId).classList.remove('hidden');
-        }
-
-        // Marketplace Engine
-        function renderMarket(list = titan.products) {
-            const container = document.getElementById('shopGrid');
-            container.innerHTML = list.map(p => `
-                <div class="glass p-6 group animate__animated animate__fadeIn">
-                    <img src="${p.img}" class="w-full h-48 object-cover rounded-2xl mb-5 border border-white/5 grayscale group-hover:grayscale-0 transition-all">
-                    <p class="text-[7px] font-cyber text-primary mb-2">${p.cat}</p>
-                    <h3 class="text-[11px] font-cyber mb-4 group-hover:text-primary transition-colors">${p.name}</h3>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xl font-bold font-code">${p.price} CR</span>
-                        <button onclick="addToCart(${p.id})" class="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-black transition-all">
-                            <i class="fas fa-plus"></i>
-                        </button>
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card glassmorphism rounded-xl overflow-hidden hover:shadow-2xl transition-all cursor-pointer">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg">${product.name}</h3>
+                        <p class="text-blue-500 font-bold mt-2">${product.price.toLocaleString()} টাকা</p>
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-sm ${product.stock < 5 ? 'text-red-500' : 'text-green-500'}">
+                                <i class="fas ${product.stock < 5 ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                                ${product.stock < 5 ? `শুধু ${product.stock}টি বাকি` : `${product.stock}টি স্টকে`}
+                            </span>
+                            <button onclick="addToCart(${product.id})" class="gradient-bg text-white px-4 py-2 rounded-lg hover:scale-105 transition">
+                                <i class="fas fa-cart-plus"></i> অ্যাড
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterShop(cat) {
-            const filtered = cat === 'ALL' ? titan.products : titan.products.filter(p => p.cat === cat);
-            renderMarket(filtered);
-        }
-
-        function searchItems(q) {
-            const filtered = titan.products.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
-            renderMarket(filtered);
-        }
-
-        // Cart & Payment Logic
-        function addToCart(id) {
-            const p = titan.products.find(x => x.id === id);
-            titan.cart.push(p);
-            updateCartUI();
-            notify("ITEM_SYNCED: " + p.name, "cyan");
-        }
-
-        function updateCartUI() {
-            const list = document.getElementById('cartItems');
-            let total = 0;
-            list.innerHTML = titan.cart.map((item, idx) => {
-                total += item.price;
-                return `
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover">
-                        <div class="flex-1">
-                            <p class="text-[10px] font-cyber uppercase">${item.name}</p>
-                            <p class="text-[9px] font-code text-primary">${item.price} CR</p>
-                        </div>
-                        <button onclick="removeFromCart(${idx})" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('totalPrice').innerText = total + ".00 CR";
-            document.getElementById('cartCount').innerText = titan.cart.length;
-        }
-
-        function removeFromCart(idx) { titan.cart.splice(idx, 1); updateCartUI(); }
-
-        function openCheckout() {
-            const total = parseInt(document.getElementById('totalPrice').innerText);
-            if(total === 0) return notify("MANIFEST_EMPTY", "red");
-            if(titan.wallet < total) return notify("INSUFFICIENT_CREDITS", "red");
-
-            const trx = prompt("ENTER NAGAD TRANSACTION ID:");
-            if(!trx || trx.length < 5) return notify("AUTH_FAILED", "red");
-
-            const order = { id: titan.orders.length+1, items: titan.cart.map(c=>c.name).join(", "), total: total, date: new Date().toLocaleDateString() };
-            titan.orders.push(order);
-            titan.wallet -= total;
-            titan.spent += total;
-            
-            localStorage.setItem('t_wallet', titan.wallet);
-            localStorage.setItem('t_spent', titan.spent);
-            localStorage.setItem('t_orders', JSON.stringify(titan.orders));
-            
-            titan.cart = [];
-            updateSystemUI(); updateCartUI(); toggleCart();
-            notify("TRANSACTION_COMPLETE", "green");
-            renderHistory();
-        }
-
-        // Admin & Security
-        function toggleAdmin() {
-            if(localStorage.getItem('t_uid') !== titan.adminId) {
-                if(prompt("INPUT ROOT PASSWORD:") === "admin123") {
-                    localStorage.setItem('t_uid', titan.adminId);
-                    location.reload();
-                }
+        // ========== CART FUNCTIONS ==========
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product && product.stock > 0) {
+                cart.push(product);
+                product.stock--;
+                document.getElementById('cartCount').innerText = cart.length;
+                renderProducts();
+                showStockAlert(`${product.name} কার্টে যোগ হয়েছে! স্টক আপডেট হচ্ছে...`);
+                
+                // Real-time stock sync simulation
+                setTimeout(() => {
+                    renderProducts();
+                }, 500);
             } else {
-                showView('admin');
-                renderAdminTable();
+                showStockAlert(`${product.name} স্টকে নেই!`, 'error');
             }
         }
 
-        function injectItem() {
-            const name = document.getElementById('in_name').value;
-            const price = parseInt(document.getElementById('in_price').value);
-            const cat = document.getElementById('in_cat').value;
-            const img = document.getElementById('in_img').value || "https://via.placeholder.com/150";
-
-            if(!name || !price) return notify("SYNTAX_ERROR", "red");
-
-            const p = { id: Date.now(), name, price, cat, img };
-            titan.products.push(p);
-            localStorage.setItem('t_prods', JSON.stringify(titan.products));
-            renderMarket(); renderAdminTable();
-            notify("DATABASE_UPDATED", "cyan");
+        function showStockAlert(message, type = 'success') {
+            const alert = document.getElementById('stockAlert');
+            const msgSpan = document.getElementById('stockMessage');
+            msgSpan.innerText = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 3000);
         }
 
-        function renderAdminTable() {
-            const container = document.getElementById('adminTable');
-            container.innerHTML = titan.products.map(p => `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td class="py-4">#${p.id}</td>
-                    <td class="py-4 text-primary">${p.name}</td>
-                    <td class="py-4 font-bold">${p.price} CR</td>
-                    <td class="py-4"><button onclick="deleteItem(${p.id})" class="text-red-500 hover:scale-110 transition-transform"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `).join('');
+        // ========== AI VOICE SEARCH ==========
+        function startVoiceSearch() {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'bn-BD';
+                recognition.start();
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    alert(`🔍 আপনি বলেছেন: "${transcript}"\nAI সার্চ করছে...`);
+                    performAISearch(transcript);
+                };
+            } else {
+                alert('আপনার ব্রাউজার ভয়েস সার্চ সাপোর্ট করে না');
+            }
         }
 
-        function deleteItem(id) {
-            titan.products = titan.products.filter(x => x.id !== id);
-            localStorage.setItem('t_prods', JSON.stringify(titan.products));
-            renderAdminTable(); renderMarket();
-            notify("DATA_PURGED", "red");
+        function performAISearch(query) {
+            // AI Intent Detection Simulation
+            const keywords = {
+                'লাল': 'fashion',
+                'বিয়ে': 'fashion',
+                'গেমিং': 'electronic',
+                'স্মার্ট': 'electronic'
+            };
+            
+            let category = 'all';
+            for (const [key, value] of Object.entries(keywords)) {
+                if (query.includes(key)) {
+                    category = value;
+                    break;
+                }
+            }
+            
+            currentFilter = category;
+            renderProducts();
+            showStockAlert(`🤖 AI বুঝেছে: "${query}" → ${category} ক্যাটাগরির পণ্য দেখাচ্ছি`);
         }
 
-        // System UI Updates
-        function updateSystemUI() {
-            document.getElementById('walletBal').innerText = titan.wallet.toFixed(2) + " CR";
-            document.getElementById('p_spent').innerText = titan.spent + " CR";
-            renderHistory();
+        // ========== IMAGE SEARCH ==========
+        async function searchByImage(input) {
+            const file = input.files[0];
+            if (file) {
+                showStockAlert('📸 AI ছবি বিশ্লেষণ করছে...');
+                // Simulate AI analysis
+                setTimeout(() => {
+                    const randomCategory = ['electronic', 'fashion'][Math.floor(Math.random() * 2)];
+                    currentFilter = randomCategory;
+                    renderProducts();
+                    showStockAlert(`✨ AI চিনেছে: ${randomCategory === 'electronic' ? 'ইলেক্ট্রনিক্স' : 'ফ্যাশন'} পণ্য দেখাচ্ছি`);
+                }, 2000);
+            }
         }
 
-        function renderHistory() {
-            document.getElementById('orderHistory').innerHTML = titan.orders.slice().reverse().map(o => `
-                <div class="bg-white/5 p-4 rounded-xl border-l-2 border-primary">
-                    <div class="flex justify-between text-[9px] font-cyber mb-1"><span>ORDER_#${o.id}</span><span>${o.date}</span></div>
-                    <p class="text-gray-500 mb-2 truncate">${o.items}</p>
-                    <p class="font-bold text-primary font-code">${o.total} CR</p>
+        // ========== AI CHATBOT ==========
+        function toggleChat() {
+            const chat = document.getElementById('chatBox');
+            chat.classList.toggle('hidden');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // User message
+            messagesDiv.innerHTML += `
+                <div class="bg-blue-500 text-white p-3 rounded-lg ml-auto max-w-[80%]">
+                    ${message}
                 </div>
-            `).join('');
+            `;
+            
+            input.value = '';
+            
+            // AI Response
+            setTimeout(() => {
+                let aiResponse = '';
+                if (message.includes('অর্ডার') || message.includes('ট্র্যাক')) {
+                    aiResponse = '🔍 আপনার অর্ডার #ORD-12345 প্রসেসিং এ আছে। ২৪ ঘণ্টার মধ্যে ডেলিভারি হবে।';
+                } else if (message.includes('রিফান্ড')) {
+                    aiResponse = '💸 রিফান্ড রিকোয়েস্ট প্রসেস করতে আপনার অর্ডার আইডি দিন। সাধারণত ৩-৫ কার্যদিবস লাগে।';
+                } else if (message.includes('কমপ্লেইন')) {
+                    aiResponse = '😟 আপনার অভিযোগ শোনার জন্য দুঃখিত! আমাদের সাপোর্ট টিম ১ ঘণ্টার মধ্যে যোগাযোগ করবে।';
+                } else {
+                    aiResponse = '🤖 আমি আপনার AI সহায়ক। অর্ডার ট্র্যাকিং, রিফান্ড, পণ্যের তথ্য জানাতে পারি। কিভাবে সাহায্য করবো?';
+                }
+                
+                messagesDiv.innerHTML += `
+                    <div class="bg-gray-200 dark:bg-gray-600 p-3 rounded-lg max-w-[80%]">
+                        🤖 ${aiResponse}
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
         }
 
-        function notify(msg, color) {
-            const box = document.getElementById('notifyBox');
-            const n = document.createElement('div');
-            n.className = `glass px-8 py-3 text-[10px] font-cyber border-${color}-500/50 text-${color}-500 animate__animated animate__fadeInRight`;
-            n.innerHTML = `<i class="fas fa-satellite-dish mr-3"></i> SYSTEM_MSG: ${msg}`;
-            box.appendChild(n);
-            setTimeout(() => { n.classList.replace('animate__fadeInRight', 'animate__fadeOutRight'); setTimeout(()=>n.remove(), 500); }, 3000);
+        // ========== DARK MODE ==========
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.fa-moon');
+            icon.classList.toggle('fa-sun');
         }
 
-        function toggleCart() { document.getElementById('cartOverlay').classList.toggle('hidden'); }
-        function logout() { localStorage.removeItem('t_uid'); location.reload(); }
+        // ========== FILTER PRODUCTS ==========
+        function filterProducts(category) {
+            currentFilter = category;
+            renderProducts();
+        }
 
+        // ========== PREDICTIVE INVENTORY ==========
+        function checkInventoryPrediction() {
+            const lowStock = products.filter(p => p.stock < 5);
+            if (lowStock.length > 0) {
+                setTimeout(() => {
+                    showStockAlert(`⚠️ AI প্রেডিকশন: ${lowStock.map(p => p.name).join(', ')} - এই পণ্যগুলো ২ দিনের মধ্যে ফুরিয়ে যাবে!`);
+                }, 10000);
+            }
+        }
+
+        // ========== DYNAMIC PRICING BOT ==========
+        function dynamicPricingBot() {
+            setInterval(() => {
+                products.forEach(product => {
+                    if (product.stock < 3) {
+                        const oldPrice = product.price;
+                        product.price = Math.floor(product.price * 1.1);
+                        if (oldPrice !== product.price) {
+                            showStockAlert(`💰 প্রাইস অ্যালার্ট: ${product.name} এর দাম বেড়ে ${product.price} টাকা হয়েছে (স্টক কম)!`);
+                            renderProducts();
+                        }
+                    } else if (product.stock > 20) {
+                        const oldPrice = product.price;
+                        product.price = Math.floor(product.price * 0.95);
+                        if (oldPrice !== product.price) {
+                            showStockAlert(`🎉 স্পেশাল অফার: ${product.name} ${Math.round((1 - product.price/oldPrice)*100)}% ছাড়ে!`);
+                            renderProducts();
+                        }
+                    }
+                });
+            }, 30000);
+        }
+
+        // ========== FRAUD DETECTION ==========
+        let suspiciousActivity = 0;
+        setInterval(() => {
+            if (cart.length > 50) {
+                suspiciousActivity++;
+                if (suspiciousActivity > 2) {
+                    showStockAlert('🚨 ফ্রড ডিটেক্টেড! অস্বাভাবিক অ্যাক্টিভিটি ব্লক করা হয়েছে।', 'error');
+                    cart = [];
+                    document.getElementById('cartCount').innerText = '0';
+                }
+            } else {
+                suspiciousActivity = 0;
+            }
+        }, 5000);
+
+        // ========== SENTIMENT ANALYSIS ==========
+        function analyzeSentiment() {
+            const messages = document.querySelectorAll('#chatMessages div');
+            let negativeCount = 0;
+            messages.forEach(msg => {
+                if (msg.innerText.includes('খারাপ') || msg.innerText.includes('কমপ্লেইন') || msg.innerText.includes('ভুল')) {
+                    negativeCount++;
+                }
+            });
+            
+            if (negativeCount > 3) {
+                showStockAlert('💝 আমরা দেখছি আপনি অসন্তুষ্ট! আপনার জন্য 20% ডিসকাউন্ট কোড: SORRY20');
+            }
+        }
+
+        // ========== INITIALIZATION ==========
+        window.onload = () => {
+            init3DBackground();
+            renderProducts();
+            checkInventoryPrediction();
+            dynamicPricingBot();
+            
+            // Real-time stock sync simulation
+            setInterval(() => {
+                products.forEach(product => {
+                    if (Math.random() < 0.1) {
+                        product.stock = Math.max(0, product.stock - 1);
+                        renderProducts();
+                    }
+                });
+            }, 15000);
+            
+            // Sentiment analysis every 30 seconds
+            setInterval(analyzeSentiment, 30000);
+            
+            // Display AI welcome
+            setTimeout(() => {
+                showStockAlert('🤖 AI সিস্টেম সক্রিয়! ভয়েস/ইমেজ সার্চ ব্যবহার করে দেখুন');
+            }, 2000);
+        };
+        
+        // Resize handler for 3D background
+        window.addEventListener('resize', () => {
+            if (renderer) {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+            }
+        });
     </script>
 </body>
-    </html>
+        </html>
