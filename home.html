@@ -7,28 +7,100 @@
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- হেডার -->
-        <div class="header">
-            <div class="logo-small">Bazze<span>R</span></div>
-            <div class="user-info" id="userInfo"></div>
-        </div>
-        
-        <!-- ওয়েলকাম -->
-        <div class="welcome-card">
-            <h2>স্বাগতম, <span id="userName"></span>! 🎉</h2>
-            <p>আজকের সেরা অফারগুলো দেখুন</p>
-        </div>
-        
-        <!-- প্রোডাক্ট গ্রিড -->
-        <div class="products-grid" id="productsGrid">
-            <!-- প্রোডাক্ট গুলো JS দিয়ে আসবে -->
-        </div>
-        
-        <!-- লগআউট বাটন -->
-        <button class="logout-btn" id="logoutBtn">লগআউট করুন</button>
+<div class="app">
+    <div class="header">
+        <div class="logo">Bazze<span>R</span></div>
+        <div class="points" id="pointsHeader">⭐ 0</div>
     </div>
-    
-    <script src="home.js"></script>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="home">🏠 হোম</div>
+        <div class="nav-item" data-page="earn">💰 আয় করুন</div>
+        <div class="nav-item" data-page="market">🛍️ মার্কেট</div>
+        <div class="nav-item" data-page="profile">👤 প্রোফাইল</div>
+        <div class="nav-item" data-page="settings">⚙️ সেটিংস</div>
+    </div>
+
+    <div class="page-container">
+        <!-- হোম পেজ -->
+        <div id="homePage" class="page active">
+            <div class="card welcome">
+                <h2>স্বাগতম, <span id="welcomeName"></span>!</h2>
+                <p>টাস্ক করে পয়েন্ট জমান, জিনিস কিনুন</p>
+            </div>
+            <div class="card">
+                <h3>📢 স্পেশাল অফার</h3>
+                <div id="offerBanner">আজ দ্বিগুণ পয়েন্ট!</div>
+            </div>
+            <div class="card">
+                <h3>🔥 সেরা সেল অফার</h3>
+                <div id="topSellOffers"></div>
+            </div>
+        </div>
+
+        <!-- আয় করুন (টাস্ক + অ্যাড) -->
+        <div id="earnPage" class="page">
+            <div class="card">
+                <h3>✅ ডেইলি টাস্ক</h3>
+                <div id="taskList"></div>
+                <button id="adminAddTask" class="btn-sm">➕ অ্যাডমিন: টাস্ক যোগ</button>
+            </div>
+            <div class="card">
+                <h3>📺 অ্যাড দেখে পয়েন্ট নিন</h3>
+                <div id="adList"></div>
+                <button id="adminAddAd" class="btn-sm">➕ অ্যাডমিন: অ্যাড যোগ</button>
+            </div>
+        </div>
+
+        <!-- মার্কেট (সেল ও ক্রয়) -->
+        <div id="marketPage" class="page">
+            <div class="card">
+                <h3>🛒 সেল অফার (ইউজারদের)</h3>
+                <div id="sellOffersList"></div>
+                <button id="newSellBtn" class="btn-primary">➕ আমি সেল করব</button>
+            </div>
+            <div class="card">
+                <h3>🎁 পয়েন্ট দিয়ে কিনুন</h3>
+                <div id="redeemShop"></div>
+            </div>
+        </div>
+
+        <!-- প্রোফাইল -->
+        <div id="profilePage" class="page">
+            <div class="card profile-card">
+                <div id="profilePic" class="profile-pic">😊</div>
+                <input type="text" id="editUsername" placeholder="ইউজারনেম">
+                <textarea id="editBio" placeholder="বায়ো লিখুন..."></textarea>
+                <button id="saveProfileBtn" class="btn-primary">প্রোফাইল সেভ</button>
+            </div>
+            <div class="card">
+                <h3>🤝 রেফারেল</h3>
+                <div id="referralCodeBox" class="ref-box"></div>
+                <button id="shareReferBtn" class="btn-sm">শেয়ার করুন (টাস্ক পয়েন্ট)</button>
+                <input type="text" id="applyReferCode" placeholder="অন্যের রেফার কোড">
+                <button id="useReferBtn" class="btn-sm">কোড ব্যবহার করুন</button>
+            </div>
+            <div class="card">
+                <h3>⭐ আমার পয়েন্ট</h3>
+                <div id="myPoints">0</div>
+                <button id="historyBtn" class="btn-sm">পয়েন্ট হিস্টরি</button>
+            </div>
+        </div>
+
+        <!-- সেটিংস -->
+        <div id="settingsPage" class="page">
+            <div class="card">
+                <h3>🎨 থিম</h3>
+                <button id="darkModeToggle" class="btn-sm">ডার্ক মোড টগল</button>
+            </div>
+            <div class="card">
+                <h3>🔐 প্রাইভেসি</h3>
+                <button id="clearDataBtn" class="btn-sm">সব ডাটা ডিলিট</button>
+                <button id="logoutBtn" class="btn-danger">লগআউট</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="home.js"></script>
 </body>
 </html>
