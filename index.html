@@ -3,86 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>অ্যাপস্টোর - শপিং অ্যাপ</title>
+    <title>BazzeR - আপনার শপিং অ্যাপ</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app-container">
-    <!-- স্ট্যাটাস বার -->
-    <div class="status-bar">
-        <span class="time">9:41</span>
-        <div class="header-actions">
-            <span>📶</span> <span>🔋</span>
-            <button class="dark-toggle" id="darkModeToggle">🌙 ডার্ক</button>
-        </div>
-    </div>
-
-    <!-- সার্চ -->
-    <div class="search-section">
-        <div class="search-box">
-            <span>🔍</span>
-            <input type="text" id="searchInput" placeholder="সার্চ করুন পণ্য...">
-        </div>
-    </div>
-
-    <!-- টপ ট্যাব -->
-    <div class="nav-tabs">
-        <div class="nav-tab active" data-tab="home">🏠 হোম</div>
-        <div class="nav-tab" data-tab="cart">🛒 কার্ট (<span id="cartCountBadge">0</span>)</div>
-    </div>
-
-    <!-- পেজ: হোম -->
-    <div id="homePage" class="page active-page">
-        <div class="slider-container" id="sliderClick">
-            <div class="slider" id="heroSlider">
-                <img src="https://picsum.photos/id/20/400/200" alt="ব্যানার 1">
-                <img src="https://picsum.photos/id/26/400/200" alt="ব্যানার 2">
-                <img src="https://picsum.photos/id/30/400/200" alt="ব্যানার 3">
+    <div class="app-container">
+        <!-- হেডার với লোগো -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <span class="logo-bazz">Bazze</span><span class="logo-r">R</span>
+                </div>
+                <div class="tagline">শপিং মেইড ইজি</div>
             </div>
         </div>
 
-        <div class="categories-grid" id="categoriesGrid">
-            <div class="cat-item" data-cat="all">🔥 সবার জন্য</div>
-            <div class="cat-item" data-cat="electronics">📱 ইলেকট্রনিক্স</div>
-            <div class="cat-item" data-cat="fashion">👕 ফ্যাশন</div>
-            <div class="cat-item" data-cat="beauty">💄 বিউটি</div>
+        <!-- ওয়েলকাম সেকশন -->
+        <div class="welcome-section">
+            <h2>স্বাগতম! 👋</h2>
+            <p>শপিং শুরু করতে লগইন করুন</p>
         </div>
 
-        <div id="productsContainer" class="products-grid"></div>
-    </div>
+        <!-- লগইন অপশন -->
+        <div class="login-options">
+            <button class="login-btn guest-btn" id="guestLogin">
+                <span class="btn-icon">👤</span>
+                <div class="btn-text">
+                    <strong>গেস্ট হিসেবে চালিয়ে যান</strong>
+                    <small>কোন রেজিস্ট্রেশনের প্রয়োজন নেই</small>
+                </div>
+            </button>
 
-    <!-- পেজ: প্রোডাক্ট ডিটেইল -->
-    <div id="detailPage" class="page">
-        <button class="back-button" onclick="showHomeFromDetail()">← ব্যাক টু হোম</button>
-        <div id="productDetailContainer"></div>
-    </div>
+            <button class="login-btn gmail-btn" id="gmailLogin">
+                <span class="btn-icon">📧</span>
+                <div class="btn-text">
+                    <strong>Gmail দিয়ে লগইন করুন</strong>
+                    <small>bazzer@gmail.com</small>
+                </div>
+            </button>
 
-    <!-- পেজ: কার্ট -->
-    <div id="cartPage" class="page">
-        <h3 style="margin-bottom: 14px;">🛒 আমার ব্যাগ</h3>
-        <div id="cartItemsList" class="cart-items-list"></div>
-        <div id="cartTotal" class="cart-total"></div>
-        <button id="checkoutBtn" class="order-button">💳 চেকআউট করুন</button>
-    </div>
+            <button class="login-btn phone-btn" id="phoneLogin">
+                <span class="btn-icon">📱</span>
+                <div class="btn-text">
+                    <strong>ফোন নম্বর দিয়ে লগইন করুন</strong>
+                    <small>OTP ভেরিফিকেশন</small>
+                </div>
+            </button>
+        </div>
 
-    <!-- পেজ: চেকআউট -->
-    <div id="checkoutPage" class="page">
-        <button class="back-button" onclick="backToCart()">← কার্টে ফিরুন</button>
-        <div class="checkout-container">
-            <h3>📦 অর্ডার কনফার্মেশন</h3>
-            <div id="checkoutDetails"></div>
-            <input type="text" id="addressInput" class="address-input" placeholder="আপনার ঠিকানা লিখুন">
-            <button id="confirmOrderBtn" class="order-button">✅ অর্ডার কনফার্ম করুন</button>
+        <!-- অথবা সেকশন -->
+        <div class="or-divider">
+            <span>অথবা</span>
+        </div>
+
+        <!-- সাইন আপ লিংক -->
+        <div class="signup-link">
+            <p>নতুন ইউজার? <a href="#" id="signupLink">অ্যাকাউন্ট খুলুন</a></p>
+        </div>
+
+        <!-- ফিচার্ড ব্র্যান্ড -->
+        <div class="featured-brands">
+            <h3>ট্রেন্ডিং ব্র্যান্ডস</h3>
+            <div class="brands-grid">
+                <div class="brand">Apple</div>
+                <div class="brand">Samsung</div>
+                <div class="brand">Xiaomi</div>
+                <div class="brand">Nike</div>
+                <div class="brand">Adidas</div>
+                <div class="brand">Louis</div>
+            </div>
         </div>
     </div>
 
-    <!-- বটম নেভ -->
-    <div class="bottom-nav">
-        <div class="nav-icon active" data-nav="home">🏠 হোম</div>
-        <div class="nav-icon" data-nav="cart">🛒 কার্ট</div>
+    <!-- মোডাল - ফোন নম্বর ইনপুট -->
+    <div id="phoneModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📱 ফোন নম্বর লগইন</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="tel" id="phoneNumber" placeholder="01XXXXXXXXX" class="phone-input">
+                <button id="sendOtpBtn" class="otp-btn">OTP পাঠান</button>
+                <div id="otpSection" style="display:none; margin-top:15px;">
+                    <input type="text" id="otpCode" placeholder="6 ডিজিটের OTP" class="otp-input">
+                    <button id="verifyOtpBtn" class="verify-btn">ভেরিফাই করুন</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <!-- মোডাল - Gmail লগইন -->
+    <div id="gmailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📧 Gmail লগইন</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="email" id="gmailEmail" placeholder="youremail@gmail.com" class="phone-input">
+                <button id="gmailLoginBtn" class="otp-btn">লগইন করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- মোডাল - সাইন আপ -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📝 সাইন আপ করুন</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="signupName" placeholder="আপনার নাম" class="phone-input">
+                <input type="email" id="signupEmail" placeholder="ইমেইল" class="phone-input">
+                <input type="tel" id="signupPhone" placeholder="ফোন নম্বর" class="phone-input">
+                <input type="password" id="signupPass" placeholder="পাসওয়ার্ড" class="phone-input">
+                <button id="createAccountBtn" class="otp-btn">অ্যাকাউন্ট তৈরি করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
