@@ -2,10 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     display: flex;
@@ -18,335 +18,96 @@ body {
     max-width: 450px;
     width: 100%;
     background: white;
-    border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    overflow: hidden;
-    padding: 30px 25px 40px;
-    animation: slideUp 0.5s ease;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* লোগো ডিজাইন */
-.header {
+    border-radius: 40px;
+    padding: 30px 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     text-align: center;
+}
+
+.logo-area {
     margin-bottom: 30px;
 }
 
 .logo {
     font-size: 48px;
     font-weight: 800;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.logo-bazz {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-
-.logo-r {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+.logo span {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    position: relative;
-    display: inline-block;
-    animation: bounce 1s ease infinite;
 }
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-.tagline {
-    color: #888;
+.slogan {
     font-size: 14px;
-    letter-spacing: 2px;
-}
-
-/* ওয়েলকাম সেকশন */
-.welcome-section {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-.welcome-section h2 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.welcome-section p {
     color: #666;
-    font-size: 15px;
+    margin-top: 5px;
 }
 
-/* লগইন বাটন */
-.login-options {
+.login-tabs {
     display: flex;
-    flex-direction: column;
     gap: 15px;
     margin-bottom: 25px;
+    background: #f1f5f9;
+    border-radius: 50px;
+    padding: 5px;
+}
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.tab-btn.active {
+    background: #667eea;
+    color: white;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.3);
 }
 
-.login-btn {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.form-box {
+    display: none;
     text-align: left;
 }
-
-.login-btn:hover {
-    transform: translateX(5px);
+.form-box.active {
+    display: block;
 }
-
-.btn-icon {
-    font-size: 28px;
-}
-
-.btn-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.btn-text strong {
-    font-size: 16px;
-    margin-bottom: 3px;
-}
-
-.btn-text small {
-    font-size: 12px;
-    opacity: 0.8;
-}
-
-.guest-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.gmail-btn {
-    background: #fff;
-    border: 2px solid #ddd;
-    color: #333;
-}
-
-.gmail-btn:hover {
-    border-color: #DB4437;
-    background: #fff5f5;
-}
-
-.phone-btn {
-    background: #fff;
-    border: 2px solid #ddd;
-    color: #333;
-}
-
-.phone-btn:hover {
-    border-color: #34A853;
-    background: #f0fff4;
-}
-
-/* অথবা ডিভাইডার */
-.or-divider {
-    text-align: center;
-    position: relative;
-    margin: 20px 0;
-}
-
-.or-divider::before,
-.or-divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 45%;
-    height: 1px;
-    background: #ddd;
-}
-
-.or-divider::before {
-    left: 0;
-}
-
-.or-divider::after {
-    right: 0;
-}
-
-.or-divider span {
-    background: white;
-    padding: 0 10px;
-    color: #999;
-    font-size: 14px;
-}
-
-/* সাইন আপ লিংক */
-.signup-link {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.signup-link a {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.signup-link a:hover {
-    text-decoration: underline;
-}
-
-/* ফিচার্ড ব্র্যান্ডস */
-.featured-brands {
-    margin-top: 20px;
-}
-
-.featured-brands h3 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.brands-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.brand {
-    background: #f5f5f5;
-    padding: 10px;
-    text-align: center;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #555;
-    transition: all 0.3s;
-    cursor: pointer;
-}
-
-.brand:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    transform: scale(1.05);
-}
-
-/* মোডাল স্টাইল */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
+input {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 30px;
+    font-size: 15px;
 }
-
-.modal-content {
-    background: white;
-    border-radius: 25px;
-    width: 90%;
-    max-width: 400px;
-    animation: modalSlide 0.3s ease;
-}
-
-@keyframes modalSlide {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.modal-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h3 {
-    margin: 0;
-    color: #333;
-}
-
-.close {
-    font-size: 28px;
-    cursor: pointer;
-    color: #999;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.phone-input, .otp-input {
+.btn-primary {
     width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    font-size: 16px;
-    margin-bottom: 12px;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-.phone-input:focus, .otp-input:focus {
-    border-color: #667eea;
-}
-
-.otp-btn, .verify-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
     border: none;
-    border-radius: 12px;
+    padding: 14px;
+    border-radius: 40px;
+    font-weight: bold;
     font-size: 16px;
-    font-weight: 600;
+    margin-top: 10px;
     cursor: pointer;
-    transition: transform 0.2s;
 }
-
-.otp-btn:hover, .verify-btn:hover {
-    transform: scale(1.02);
+.guest-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #667eea;
+    font-weight: 500;
+    cursor: pointer;
 }
-
-/* রেসপন্সিভ */
-@media (max-width: 480px) {
-    .app-container {
-        padding: 20px 15px 30px;
-    }
-    
-    .logo {
-        font-size: 38px;
-    }
-    
-    .welcome-section h2 {
-        font-size: 24px;
-    }
+.footer-note {
+    margin-top: 35px;
+    font-size: 12px;
+    color: #94a3b8;
 }
