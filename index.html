@@ -3,127 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>BazzeR - আপনার শপিং অ্যাপ</title>
+    <title>BazzeR - লগইন</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- হেডার với লোগো -->
-        <div class="header">
-            <div class="logo-container">
-                <div class="logo">
-                    <span class="logo-bazz">Bazze</span><span class="logo-r">R</span>
-                </div>
-                <div class="tagline">শপিং মেইড ইজি</div>
-            </div>
+        <div class="logo-area">
+            <div class="logo">Bazze<span>R</span></div>
+            <div class="slogan">শপিং + টাস্ক + পয়েন্ট</div>
         </div>
 
-        <!-- ওয়েলকাম সেকশন -->
-        <div class="welcome-section">
-            <h2>স্বাগতম! 👋</h2>
-            <p>শপিং শুরু করতে লগইন করুন</p>
+        <div class="login-tabs">
+            <button class="tab-btn active" data-tab="login">লগইন</button>
+            <button class="tab-btn" data-tab="register">রেজিস্টার</button>
         </div>
 
-        <!-- লগইন অপশন -->
-        <div class="login-options">
-            <button class="login-btn guest-btn" id="guestLogin">
-                <span class="btn-icon">👤</span>
-                <div class="btn-text">
-                    <strong>গেস্ট হিসেবে চালিয়ে যান</strong>
-                    <small>কোন রেজিস্ট্রেশনের প্রয়োজন নেই</small>
-                </div>
-            </button>
-
-            <button class="login-btn gmail-btn" id="gmailLogin">
-                <span class="btn-icon">📧</span>
-                <div class="btn-text">
-                    <strong>Gmail দিয়ে লগইন করুন</strong>
-                    <small>bazzer@gmail.com</small>
-                </div>
-            </button>
-
-            <button class="login-btn phone-btn" id="phoneLogin">
-                <span class="btn-icon">📱</span>
-                <div class="btn-text">
-                    <strong>ফোন নম্বর দিয়ে লগইন করুন</strong>
-                    <small>OTP ভেরিফিকেশন</small>
-                </div>
-            </button>
+        <!-- লগইন ফর্ম -->
+        <div id="loginForm" class="form-box active">
+            <input type="text" id="loginEmail" placeholder="ইমেইল বা ফোন" autocomplete="off">
+            <input type="password" id="loginPassword" placeholder="পাসওয়ার্ড">
+            <button id="doLoginBtn" class="btn-primary">লগইন করুন</button>
+            <div class="guest-link" id="guestLoginBtn">👉 গেস্ট হিসেবে চালিয়ে যান</div>
         </div>
 
-        <!-- অথবা সেকশন -->
-        <div class="or-divider">
-            <span>অথবা</span>
+        <!-- রেজিস্টার ফর্ম -->
+        <div id="registerForm" class="form-box">
+            <input type="text" id="regName" placeholder="আপনার নাম">
+            <input type="email" id="regEmail" placeholder="ইমেইল">
+            <input type="tel" id="regPhone" placeholder="ফোন নম্বর">
+            <input type="password" id="regPassword" placeholder="পাসওয়ার্ড (৬+ অক্ষর)">
+            <input type="text" id="refCode" placeholder="রেফারেল কোড (যদি থাকে)">
+            <button id="doRegisterBtn" class="btn-primary">অ্যাকাউন্ট খুলুন</button>
         </div>
 
-        <!-- সাইন আপ লিংক -->
-        <div class="signup-link">
-            <p>নতুন ইউজার? <a href="#" id="signupLink">অ্যাকাউন্ট খুলুন</a></p>
-        </div>
-
-        <!-- ফিচার্ড ব্র্যান্ড -->
-        <div class="featured-brands">
-            <h3>ট্রেন্ডিং ব্র্যান্ডস</h3>
-            <div class="brands-grid">
-                <div class="brand">Apple</div>
-                <div class="brand">Samsung</div>
-                <div class="brand">Xiaomi</div>
-                <div class="brand">Nike</div>
-                <div class="brand">Adidas</div>
-                <div class="brand">Louis</div>
-            </div>
-        </div>
+        <div class="footer-note">BazzeR - টাস্ক করে পয়েন্ট জিতুন</div>
     </div>
-
-    <!-- মোডাল - ফোন নম্বর ইনপুট -->
-    <div id="phoneModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📱 ফোন নম্বর লগইন</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <input type="tel" id="phoneNumber" placeholder="01XXXXXXXXX" class="phone-input">
-                <button id="sendOtpBtn" class="otp-btn">OTP পাঠান</button>
-                <div id="otpSection" style="display:none; margin-top:15px;">
-                    <input type="text" id="otpCode" placeholder="6 ডিজিটের OTP" class="otp-input">
-                    <button id="verifyOtpBtn" class="verify-btn">ভেরিফাই করুন</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- মোডাল - Gmail লগইন -->
-    <div id="gmailModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📧 Gmail লগইন</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <input type="email" id="gmailEmail" placeholder="youremail@gmail.com" class="phone-input">
-                <button id="gmailLoginBtn" class="otp-btn">লগইন করুন</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- মোডাল - সাইন আপ -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📝 সাইন আপ করুন</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="signupName" placeholder="আপনার নাম" class="phone-input">
-                <input type="email" id="signupEmail" placeholder="ইমেইল" class="phone-input">
-                <input type="tel" id="signupPhone" placeholder="ফোন নম্বর" class="phone-input">
-                <input type="password" id="signupPass" placeholder="পাসওয়ার্ড" class="phone-input">
-                <button id="createAccountBtn" class="otp-btn">অ্যাকাউন্ট তৈরি করুন</button>
-            </div>
-        </div>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
